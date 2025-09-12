@@ -1,0 +1,443 @@
+.settlement-container {
+  padding: 30px;
+  max-width: 1800px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.settlement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.settlement-header h2 {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.company-filter select {
+  padding: 12px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.company-filter select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.company-filter select option {
+  background-color: #333;
+  color: white;
+}
+
+.sender-filter select {
+  padding: 8px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sender-filter select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.sender-filter select option {
+  background-color: white;
+  color: #333;
+}
+
+/* 기본 통계 카드 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.stats-grid:first-of-type {
+  margin-bottom: 20px;
+}
+
+.stats-grid:last-of-type {
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card.updating {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* 입금 카드 스타일 */
+.deposit-card::before {
+  background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+/* 출금 카드 스타일 */
+.withdrawal-card::before {
+  background: linear-gradient(90deg, #dc3545, #fd7e14);
+}
+
+.deposit-card h3 {
+  color: #28a745;
+}
+
+.withdrawal-card h3 {
+  color: #dc3545;
+}
+
+/* 수수료 값 스타일 */
+.fee-value {
+  color: #ff6b35 !important;
+  font-weight: 700;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* 차트 섹션 */
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* 각 차트별 너비 조정 */
+.charts-section .analysis-section:nth-child(1) {
+  /* 일별 분석 - 오늘 입금과 동일한 너비 */
+  grid-column: 1;
+}
+
+.charts-section .analysis-section:nth-child(2) {
+  /* 주별 분석 - 이번 주 입금과 동일한 너비 */
+  grid-column: 2;
+}
+
+.charts-section .analysis-section:nth-child(3) {
+  /* 월별 분석 - 이번 달 입금과 동일한 너비 */
+  grid-column: 3;
+}
+
+/* 테이블 섹션 */
+.tables-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  max-width: 100%;
+}
+
+/* 분석 섹션 */
+.analysis-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.analysis-section.updating {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.chart-info {
+  color: #666;
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* 차트 스타일 */
+.period-chart {
+  margin-top: 25px;
+}
+
+.chart-container {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 280px;
+  padding: 25px 0 15px 0;
+  overflow-x: auto;
+  min-width: 100%;
+}
+
+.chart-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 15px;
+  max-width: 30px;
+}
+
+.bar-label {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  height: 20px;
+  line-height: 20px;
+  width: 100%;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-content {
+  flex: 1;
+  display: flex;
+  align-items: end;
+  width: 100%;
+  max-width: 15px;
+  margin: 0 auto;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(to top, #007bff, #0056b3);
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bar:hover {
+  transform: scaleY(1.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.bar-value {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 10px;
+  color: #333;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.bar-value div:first-child {
+  font-weight: 700;
+  color: #007bff;
+}
+
+.bar-value div:last-child {
+  color: #666;
+  margin-top: 4px;
+}
+
+/* 호버 시 전체 금액 표시 */
+.chart-bar:hover .bar-value div:last-child::after {
+  content: attr(data-full-amount);
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 차트별 색상 구분 */
+.daily-chart .bar {
+  background: linear-gradient(to top, #4CAF50, #45a049);
+}
+
+.weekly-chart .bar {
+  background: linear-gradient(to top, #2196F3, #1976D2);
+}
+
+.monthly-chart .bar {
+  background: linear-gradient(to top, #FF9800, #F57C00);
+}
+
+/* 테이블 스타일 */
+.sender-table,
+.company-table {
+  overflow-x: auto;
+  margin-top: 25px;
+}
+
+.sender-table table,
+.company-table table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  table-layout: fixed;
+}
+
+.sender-table th,
+.sender-table td,
+.company-table th,
+.company-table td {
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.sender-table th,
+.company-table th {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-weight: 700;
+  color: #333;
+  font-size: 16px;
+}
+
+.sender-table td,
+.company-table td {
+  color: #333;
+  font-size: 15px;
+}
+
+.sender-table tr:hover,
+.company-table tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+/* 순위 스타일 */
+.sender-table td:first-child,
+.company-table td:first-child {
+  font-weight: 700;
+  color: #007bff;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* 로딩 및 오류 상태 */
+.loading,
+.error {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.no-data {
+  text-align: center;
+  padding: 60px;
+  color: #666;
+  font-style: italic;
+  font-size: 16px;
+} 

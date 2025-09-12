@@ -1,0 +1,346 @@
+.manual-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.manual-header {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.manual-header h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.manual-notice {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  margin-top: 20px;
+}
+
+.manual-notice h3 {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.manual-notice p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.manual-content {
+  display: grid;
+  gap: 30px;
+}
+
+.manual-section {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.manual-section h3 {
+  margin: 0 0 25px 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 3px solid #667eea;
+  padding-bottom: 15px;
+}
+
+.manual-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.manual-section li {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.manual-step {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.manual-step:last-child {
+  margin-bottom: 0;
+}
+
+.manual-step h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.manual-step p {
+  margin: 0 0 10px 0;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.manual-step ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+
+.manual-step li {
+  margin-bottom: 6px;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.manual-step strong {
+  color: #333;
+  font-weight: 700;
+}
+
+.bank-list {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+/* 가이드 버튼 스타일 */
+.guide-buttons {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.guide-btn {
+  display: flex;
+  align-items: center;
+  padding: 25px;
+  border: none;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  border: 2px solid transparent;
+}
+
+.guide-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.guide-btn.app-guide {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.guide-btn.app-guide:hover {
+  background: linear-gradient(135deg, #5a6fd8, #6a4190);
+  border-color: #4a5fc7;
+}
+
+.guide-btn.admin-guide {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: white;
+}
+
+.guide-btn.admin-guide:hover {
+  background: linear-gradient(135deg, #e085e8, #e54b60);
+  border-color: #d077d6;
+}
+
+.guide-icon {
+  font-size: 32px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.guide-text h4 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.guide-text p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .manual-container {
+    padding: 20px;
+  }
+  
+  .manual-header,
+  .manual-section {
+    padding: 20px;
+  }
+  
+  .manual-header h2 {
+    font-size: 24px;
+  }
+  
+  .manual-section h3 {
+    font-size: 20px;
+  }
+  
+  .manual-step {
+    padding: 15px;
+  }
+  
+  .guide-buttons {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .guide-btn {
+    padding: 20px;
+  }
+  
+  .guide-icon {
+    font-size: 28px;
+    margin-right: 15px;
+  }
+  
+  .guide-text h4 {
+    font-size: 18px;
+  }
+  
+  .guide-text p {
+    font-size: 13px;
+  }
+}
+
+/* PDF 모달 스타일 */
+.pdf-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.pdf-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.pdf-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.pdf-modal-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.pdf-modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.pdf-modal-close:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.pdf-modal-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.pdf-modal-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .pdf-modal-overlay {
+    padding: 10px;
+  }
+  
+  .pdf-modal {
+    height: 95vh;
+    max-height: none;
+  }
+  
+  .pdf-modal-header {
+    padding: 15px 20px;
+  }
+  
+  .pdf-modal-header h3 {
+    font-size: 18px;
+  }
+  
+  .pdf-modal-close {
+    font-size: 24px;
+    width: 28px;
+    height: 28px;
+  }
+} 

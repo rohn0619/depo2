@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-07-26T06:25:01.924Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: SMS 파싱 실패",
+  "data": {
+    "sms": "보낸사람 : 15882100\n농협 입금1원\n07/22 18:46 352-****-4273-63 otp8887 잔액2,150,001원",
+    "parsed": {
+      "bank": "농협",
+      "datetime": "07/22 18:46",
+      "transaction_type": "deposit",
+      "amount": "1",
+      "balance": "2150001"
+    },
+    "missingFields": {
+      "bank": false,
+      "datetime": false,
+      "amount": false,
+      "sender_name": true,
+      "transaction_type": false
+    }
+  },
+  "error": {
+    "name": "Error",
+    "message": "필수 필드 누락",
+    "stack": "Error: 필수 필드 누락\n    at /Users/rohn/Desktop/project/depo/backend/routes/deposits.js:93:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "timestamp": "2025-07-09T02:00:28.179Z",
+  "level": "ERROR",
+  "message": "SSE 연결 오류",
+  "data": {
+    "clientId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJzdXBlciIsImNvbXBhbnkiOiLqtIDrpqzsnpAiLCJpYXQiOjE3NTE5ODczODgsImV4cCI6MTc1MjA3Mzc4OH0.iGT2CVLAkMXuhhEIEY1L2jt7Z7BrnYv780IknCRdaqk_1751997478032",
+    "error": "aborted"
+  }
+}

@@ -1,0 +1,1281 @@
+{
+  "timestamp": "2025-07-12T03:54:52.302Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND d.company = ? AND d.date >= ? AND d.date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'where clause'",
+    "stack": "Error: Unknown column 'd.company' in 'where clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'where clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:55:12.295Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND d.company = ? AND d.date >= ? AND d.date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'where clause'",
+    "stack": "Error: Unknown column 'd.company' in 'where clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'where clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:55:12.305Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND d.company = ? AND d.date >= ? AND d.date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'where clause'",
+    "stack": "Error: Unknown column 'd.company' in 'where clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'where clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:55:12.320Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND d.company = ? AND d.date >= ? AND d.date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'where clause'",
+    "stack": "Error: Unknown column 'd.company' in 'where clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'where clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:55:12.328Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND d.company = ? AND d.date >= ? AND d.date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'where clause'",
+    "stack": "Error: Unknown column 'd.company' in 'where clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'where clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.204Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.205Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.219Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.219Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.313Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.313Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.340Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.340Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.344Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:57:03.344Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.231Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.231Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.249Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.250Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.257Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.258Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.262Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.262Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.266Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            d.sender,\n            \n            u.company_name,\n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            AVG(d.amount) as avg_amount\n        FROM (\n            SELECT sender,  amount\n            FROM deposits \n            WHERE 1=1 AND company = ? AND date >= ? AND date < ? AND transaction_type = 1\n        ) d\n        LEFT JOIN users u ON d.company = u.company\n        GROUP BY d.sender, u.company_name\n        ORDER BY total_amount DESC\n        LIMIT 10\n    ",
+    "params": [
+      "시티",
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T03:58:29.266Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 입금자 분석 조회",
+  "data": {
+    "company": null,
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "Unknown column 'd.company' in 'on clause'",
+    "stack": "Error: Unknown column 'd.company' in 'on clause'\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getSenderAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:292:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:49:22",
+    "code": "ER_BAD_FIELD_ERROR",
+    "sqlMessage": "Unknown column 'd.company' in 'on clause'",
+    "sqlState": "42S22"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:06.878Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:06.884Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:06.889Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:06.895Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:11.567Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:11.570Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:11.575Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:11.582Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:17.227Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:17.241Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:17.244Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:17.247Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:37.879Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:37.901Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:38.000Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:02:38.002Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:55.119Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:55.134Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:55.197Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:55.202Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:58.880Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:58.884Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:58.890Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:04:58.894Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:06:53.790Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:06:53.799Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:06:53.806Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:06:53.809Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:07:59.682Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:07:59.720Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:07:59.808Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T04:07:59.822Z",
+  "level": "ERROR",
+  "message": "비즈니스 로직 오류: 정산 분류별 분석 조회",
+  "data": {
+    "month": null,
+    "user": "eee111"
+  },
+  "error": {
+    "name": "Error",
+    "message": "접근 권한이 없습니다.",
+    "stack": "Error: 접근 권한이 없습니다.\n    at Object.getCompanyAnalysis (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:304:15)\n    at /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:61:46\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)\n    at next (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/route.js:149:13)\n    at /Users/rohn/Desktop/project/depo/backend/middleware/auth.js:16:9\n    at /Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:261:12\n    at getSecret (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:97:14)\n    at module.exports [as verify] (/Users/rohn/Desktop/project/depo/backend/node_modules/jsonwebtoken/verify.js:101:10)\n    at authenticateToken (/Users/rohn/Desktop/project/depo/backend/middleware/auth.js:11:9)\n    at Layer.handle [as handle_request] (/Users/rohn/Desktop/project/depo/backend/node_modules/express/lib/router/layer.js:95:5)"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:04:38.063Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT d.id, \n               DATE_FORMAT(d.date, '%Y-%m-%d %H:%i:%s') as date,\n               d.bank, d.amount, d.balance, d.transaction_type,\n               d.sender, d.company, d.sms_raw, d.is_checked,\n               d.created_at, u.fee, u.company_name\n        FROM deposits d \n        LEFT JOIN users u ON d.company = u.company\n     ORDER BY d.id DESC",
+    "params": []
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getDeposits (/Users/rohn/Desktop/project/depo/backend/services/depositService.js:49:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/deposits.js:14:26",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:04:42.308Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-12"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:04:42.310Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-05 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:04:42.310Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-06-12 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:04:42.310Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-11"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:05:02.286Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-11"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.570Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-06-12 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.571Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-05 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.576Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-11"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.577Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-12"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.577Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-06-12 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:07:41.578Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-05 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:08.858Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT d.id, \n               DATE_FORMAT(d.date, '%Y-%m-%d %H:%i:%s') as date,\n               d.bank, d.amount, d.balance, d.transaction_type,\n               d.sender, d.company, d.sms_raw, d.is_checked,\n               d.created_at, u.fee, u.company_name\n        FROM deposits d \n        LEFT JOIN users u ON d.company = u.company\n     ORDER BY d.id DESC",
+    "params": []
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getDeposits (/Users/rohn/Desktop/project/depo/backend/services/depositService.js:49:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/deposits.js:14:26",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:11.406Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-06-12 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:11.407Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-12"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:11.408Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-11"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:11.408Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND date >= ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-05 00:00:00"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
+{
+  "timestamp": "2025-07-12T15:09:31.406Z",
+  "level": "ERROR",
+  "message": "데이터베이스 쿼리 오류",
+  "data": {
+    "query": "\n        SELECT \n            COUNT(*) as count,\n            SUM(d.amount) as total_amount,\n            ROUND(SUM(CASE \n                WHEN u.fee IS NOT NULL AND u.fee > 0 \n                THEN d.amount * u.fee / 100 \n                ELSE 0 \n            END)) as total_fee\n        FROM deposits d\n        LEFT JOIN users u ON d.company = u.company\n        WHERE 1=1 AND LEFT(date, 10) = ? AND d.transaction_type = 1\n    ",
+    "params": [
+      "2025-07-11"
+    ]
+  },
+  "error": {
+    "name": "Error",
+    "message": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "stack": "Error: Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='\n    at PromiseConnection.query (/Users/rohn/Desktop/project/depo/backend/node_modules/mysql2/lib/promise/connection.js:29:22)\n    at Object.getBasicStats (/Users/rohn/Desktop/project/depo/backend/services/settlementService.js:75:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/rohn/Desktop/project/depo/backend/routes/settlement.js:11:23",
+    "code": "ER_CANT_AGGREGATE_2COLLATIONS",
+    "sqlMessage": "Illegal mix of collations (utf8mb4_general_ci,IMPLICIT) and (utf8mb4_0900_ai_ci,IMPLICIT) for operation '='",
+    "sqlState": "HY000"
+  }
+}
