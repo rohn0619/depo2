@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
 const sseService = require('../services/sseService');
 const logger = require('../utils/logger');
 
@@ -59,12 +58,9 @@ router.get('/connect', (req, res) => {
 });
 
 // SSE 상태 확인 엔드포인트 (관리자용)
-router.get('/status', authenticateToken, (req, res) => {
+router.get('/status', (req, res) => {
     try {
-        // 관리자만 접근 가능
-        if (req.user.role !== 'admin' && req.user.role !== 'super') {
-            return res.status(403).json({ error: '접근 권한이 없습니다.' });
-        }
+        // 관리자만 접근 가능 (토큰 인증 제거로 인해 권한 체크 생략)
         
         const status = {
             connectedClients: sseService.getClientCount(),

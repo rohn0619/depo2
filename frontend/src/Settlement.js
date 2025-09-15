@@ -30,10 +30,17 @@ function Settlement() {
   const [selectedCompanyMonth, setSelectedCompanyMonth] = useState('');
   const scrollPositionRef = useRef(0);
   const [isUpdating, setIsUpdating] = useState(false);
+  
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
     setUser(userData);
+    
+    // 정산 사용자인 경우 자신의 분류만 사용
+    if (userData?.role === 'settlement') {
+      setAllCompanies([userData.company]);
+      setSelectedCompany(userData.company);
+    }
     
     // 관리자만 모든 분류 목록을 가져옴
     if (userData?.role !== 'user') {
@@ -82,39 +89,43 @@ function Settlement() {
     }
   };
 
+
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
       const currentUser = JSON.parse(localStorage.getItem('user'));
       
+      // 정산 사용자의 경우 자신의 분류로 강제 필터링
+      const companyFilter = currentUser?.role === 'settlement' ? currentUser.company : selectedCompany;
+      
       // 기본 통계 데이터 가져오기 (분류 필터 적용)
       const [yesterdayStats, todayStats, weekStats, monthStats, yesterdayWithdrawalStats, todayWithdrawalStats, weekWithdrawalStats, monthWithdrawalStats] = await Promise.all([
-        axios.get(`/api/settlement/basic-stats?period=yesterday${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/basic-stats?period=yesterday${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/basic-stats?period=today${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/basic-stats?period=today${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/basic-stats?period=week${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/basic-stats?period=week${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/basic-stats?period=month${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/basic-stats?period=month${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/withdrawal-stats?period=yesterday${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/withdrawal-stats?period=yesterday${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/withdrawal-stats?period=today${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/withdrawal-stats?period=today${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/withdrawal-stats?period=week${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/withdrawal-stats?period=week${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        axios.get(`/api/settlement/withdrawal-stats?period=month${selectedCompany ? `&company=${selectedCompany}` : ''}`, {
+        axios.get(`/api/settlement/withdrawal-stats?period=month${companyFilter ? `&company=${companyFilter}` : ''}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
-
+      
       setBasicStats({
         yesterday: yesterdayStats.data,
         today: todayStats.data,
@@ -132,8 +143,8 @@ function Settlement() {
       // 입금자 분석 데이터 가져오기 (분류 및 월별 필터 적용)
       let senderUrl = '/api/settlement/sender-analysis?';
       const senderParams = [];
-      if (selectedCompany) {
-        senderParams.push(`company=${selectedCompany}`);
+      if (companyFilter) {
+        senderParams.push(`company=${companyFilter}`);
       }
       if (selectedMonth) {
         senderParams.push(`month=${selectedMonth}`);
@@ -274,6 +285,7 @@ function Settlement() {
     );
   }
 
+
   return (
     <div className="settlement-container">
       <div className="settlement-header">
@@ -283,6 +295,7 @@ function Settlement() {
             <select 
               value={selectedCompany} 
               onChange={(e) => setSelectedCompany(e.target.value)}
+              disabled={user?.role === 'settlement'}
             >
               <option value="">전체 분류</option>
               {allCompanies.map(company => (
@@ -308,10 +321,22 @@ function Settlement() {
               <span className="stat-label">금액</span>
               <span className="stat-value">{formatAmount(basicStats.yesterday.total_amount)}</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">수수료</span>
-              <span className="stat-value fee-value">{formatAmount(basicStats.yesterday.total_fee || 0)}</span>
-            </div>
+            {user?.role !== 'settlement' && (
+              <div className="stat-item">
+                <span className="stat-label">수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.yesterday.total_fee || 0)}
+                </span>
+              </div>
+            )}
+            {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
+              <div className="stat-item">
+                <span className="stat-label">정산 수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.yesterday.settlement_fee || 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className={`stat-card deposit-card ${isUpdating ? 'updating' : ''}`}>
@@ -325,10 +350,22 @@ function Settlement() {
               <span className="stat-label">금액</span>
               <span className="stat-value">{formatAmount(basicStats.today.total_amount)}</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">수수료</span>
-              <span className="stat-value fee-value">{formatAmount(basicStats.today.total_fee || 0)}</span>
-            </div>
+            {user?.role !== 'settlement' && (
+              <div className="stat-item">
+                <span className="stat-label">수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.today.total_fee || 0)}
+                </span>
+              </div>
+            )}
+            {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
+              <div className="stat-item">
+                <span className="stat-label">정산 수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.today.settlement_fee || 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -343,10 +380,22 @@ function Settlement() {
               <span className="stat-label">금액</span>
               <span className="stat-value">{formatAmount(basicStats.week.total_amount)}</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">수수료</span>
-              <span className="stat-value fee-value">{formatAmount(basicStats.week.total_fee || 0)}</span>
-            </div>
+            {user?.role !== 'settlement' && (
+              <div className="stat-item">
+                <span className="stat-label">수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.week.total_fee || 0)}
+                </span>
+              </div>
+            )}
+            {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
+              <div className="stat-item">
+                <span className="stat-label">정산 수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.week.settlement_fee || 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -361,10 +410,22 @@ function Settlement() {
               <span className="stat-label">금액</span>
               <span className="stat-value">{formatAmount(basicStats.month.total_amount)}</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">수수료</span>
-              <span className="stat-value fee-value">{formatAmount(basicStats.month.total_fee || 0)}</span>
-            </div>
+            {user?.role !== 'settlement' && (
+              <div className="stat-item">
+                <span className="stat-label">수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.month.total_fee || 0)}
+                </span>
+              </div>
+            )}
+            {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
+              <div className="stat-item">
+                <span className="stat-label">정산 수수료</span>
+                <span className="stat-value fee-value">
+                  {formatAmount(basicStats.month.settlement_fee || 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -521,7 +582,7 @@ function Settlement() {
         </div>
 
         {/* 분류별 분석 (관리자 전용) */}
-        {user?.role !== 'user' && (
+        {user?.role !== 'user' && user?.role !== 'settlement' && (
           <div className={`analysis-section ${isUpdating ? 'updating' : ''}`}>
             <div className="section-header">
               <h3>분류별 분석</h3>
@@ -549,13 +610,14 @@ function Settlement() {
                     <th>입금 건수</th>
                     <th>총 입금액</th>
                     <th>총 수수료</th>
+                    <th>총 정산수수료</th>
                     <th>총 출금액</th>
                   </tr>
                 </thead>
                 <tbody>
                   {companyAnalysis.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="no-data">
+                      <td colSpan={8} className="no-data">
                         분류별 데이터가 없습니다.
                       </td>
                     </tr>
@@ -568,6 +630,7 @@ function Settlement() {
                         <td>{company.deposit_count}건</td>
                         <td>{formatAmount(company.total_deposit)}</td>
                         <td className="fee-value">{formatAmount(company.total_fee)}</td>
+                        <td className="fee-value">{formatAmount(company.total_settlement_fee || 0)}</td>
                         <td>{formatAmount(company.total_withdrawal)}</td>
                       </tr>
                     ))

@@ -481,43 +481,7 @@ async function ensureDepositsTable() {
     await conn.end();
 }
 
-// 입금내역 API (MySQL) - 인증 필요
-app.get('/api/deposits', authenticateToken, async (req, res) => {
-    try {
-        await ensureDepositsTable();
-        const conn = await mysql.createConnection(dbConfig);
-        
-        let query = 'SELECT * FROM deposits';
-        let params = [];
-        
-        // 일반 사용자는 자신의 분류와 일치하는 입금내역만 조회
-        if (req.user.role === 'user') {
-            query += ' WHERE company = ?';
-            params.push(req.user.name);
-        }
-        
-        query += ' ORDER BY id DESC';
-        const [rows] = await conn.query(query, params);
-        await conn.end();
-        
-        // 프론트 호환을 위해 sender -> sender로, date는 YYYY-MM-DD HH:mm 형태로
-        const result = rows.map(row => ({
-            id: row.id,
-            date: row.date ? row.date.toISOString().replace('T', ' ').slice(0, 16) : null,
-            bank: row.bank,
-            amount: row.amount,
-            sender: row.sender,
-            company: row.company,
-            sms_raw: row.sms_raw,
-            is_checked: row.is_checked,
-            created_at: row.created_at ? row.created_at.toISOString().replace('T', ' ').slice(0, 19) : null
-        }));
-        res.json(result);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'DB 오류', message: e.message });
-    }
-});
+// 입금내역 API는 routes/deposits.js에서 처리됨 (중복 제거)
 
 // 문자 파싱 후 DB 저장 API - 인증 필요
 app.post('/api/deposits', authenticateToken, async (req, res) => {

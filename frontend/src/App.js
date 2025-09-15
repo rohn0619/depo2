@@ -95,30 +95,34 @@ function AppContent() {
       timestamp: new Date().toISOString()
     });
     
-    // 폴링 시작 (lastCheckedId 초기화 포함)
-    await pollingClient.start();
+    // 폴링 시작 (정산 사용자 제외)
+    if (loginData.user?.role !== 'settlement') {
+      await pollingClient.start();
+    }
     
-    // 로그인 시 미확인 개수를 가져와서 뱃지 설정
-    const token = loginData.token;
-    const user = loginData.user;
-    const params = new URLSearchParams({
-      role: user?.role || 'user',
-      company: user?.company || ''
-    });
-    
-    fetch(`${API_BASE_URL}/api/deposits/unchecked-count?${params}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setUnreadCount(data?.count || 0);
-      })
-      .catch(error => {
-        logger.apiError('GET', '/api/deposits/unchecked-count', error);
-        setUnreadCount(0);
+    // 로그인 시 미확인 개수를 가져와서 뱃지 설정 (정산 사용자 제외)
+    if (loginData.user?.role !== 'settlement') {
+      const token = loginData.token;
+      const user = loginData.user;
+      const params = new URLSearchParams({
+        role: user?.role || 'user',
+        company: user?.company || ''
       });
+      
+      fetch(`${API_BASE_URL}/api/deposits/unchecked-count?${params}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          setUnreadCount(data?.count || 0);
+        })
+        .catch(error => {
+          logger.apiError('GET', '/api/deposits/unchecked-count', error);
+          setUnreadCount(0);
+        });
+    }
     
     // 로그인 후에는 페이지 이동하지 않음 (폴링이 정상적으로 시작되도록)
   };
@@ -145,9 +149,9 @@ function AppContent() {
     window.location.href = '/';
   };
 
-  // 폴링 이벤트 핸들러 설정
+  // 폴링 이벤트 핸들러 설정 (정산 사용자 제외)
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || user?.role === 'settlement') return;
 
     // 새 입금 내역 알림 핸들러
     pollingClient.setNewDepositCallback((data) => {
@@ -364,30 +368,49 @@ function AppContent() {
         </div>
         <nav>
           <ul>
-            <li>
-              <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>문자 테스트</NavLink>
-            </li>
-            <li>
-              <NavLink to="/deposits" className={({ isActive }) => isActive ? 'active' : ''} onClick={handleDepositsMenuClick}>
-                입/출금 내역
-                {unreadCount > 0 && (
-                  <span className="unread-badge">{unreadCount}</span>
+            {/* 정산 사용자는 입금 내역과 정산 페이지만 표시 */}
+            {user?.role === 'settlement' ? (
+              <>
+                <li>
+                  <NavLink to="/deposits" className={({ isActive }) => isActive ? 'active' : ''} onClick={handleDepositsMenuClick}>
+                    입/출금 내역
+                    {unreadCount > 0 && (
+                      <span className="unread-badge">{unreadCount}</span>
+                    )}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/settlement" className={({ isActive }) => isActive ? 'active' : ''}>정산</NavLink>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>문자 테스트</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/deposits" className={({ isActive }) => isActive ? 'active' : ''} onClick={handleDepositsMenuClick}>
+                    입/출금 내역
+                    {unreadCount > 0 && (
+                      <span className="unread-badge">{unreadCount}</span>
+                    )}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/settlement" className={({ isActive }) => isActive ? 'active' : ''}>정산</NavLink>
+                </li>
+                {user?.role !== 'user' && (
+                  <li>
+                    <NavLink to="/manual" className={({ isActive }) => isActive ? 'active' : ''}>📖 메뉴얼</NavLink>
+                  </li>
                 )}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/settlement" className={({ isActive }) => isActive ? 'active' : ''}>정산</NavLink>
-            </li>
-            {user?.role !== 'user' && (
-              <li>
-                <NavLink to="/manual" className={({ isActive }) => isActive ? 'active' : ''}>📖 메뉴얼</NavLink>
-              </li>
-            )}
-            {['super', 'admin'].includes(user?.role) && (
-              <li>
-                <NavLink to="/users" className={({ isActive }) => isActive ? 'active' : ''}>사용자 관리</NavLink>
-                <NavLink to="/companies" className={({ isActive }) => isActive ? 'active' : ''}>분류 관리</NavLink>
-              </li>
+                {['super', 'admin'].includes(user?.role) && (
+                  <li>
+                    <NavLink to="/users" className={({ isActive }) => isActive ? 'active' : ''}>사용자 관리</NavLink>
+                    <NavLink to="/companies" className={({ isActive }) => isActive ? 'active' : ''}>분류 관리</NavLink>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         </nav>
@@ -405,13 +428,13 @@ function AppContent() {
       </aside>
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<MessageTest />} />
+          <Route path="/" element={user?.role === 'settlement' ? <Navigate to="/deposits" replace /> : <MessageTest />} />
           <Route path="/deposits" element={<DepositTable setUnreadCount={setUnreadCount} dataUpdateTrigger={dataUpdateTrigger} />} />
           <Route path="/settlement" element={<Settlement />} />
           <Route path="/manual" element={<Manual />} />
           <Route path="/users" element={<UserManagement />} />
           <Route path="/companies" element={<CompanyManagement />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to={user?.role === 'settlement' ? "/deposits" : "/"} replace />} />
         </Routes>
       </main>
     </div>

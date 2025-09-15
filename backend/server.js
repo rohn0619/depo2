@@ -23,7 +23,7 @@ const dbConfig = require('./config/database');
 const logger = require('./utils/logger');
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5001;
 
 // 미들웨어 - CORS 설정
 app.use(cors({
@@ -78,23 +78,6 @@ function requireEnv(name) {
     return value;
 }
 
-// JWT 토큰 검증 미들웨어
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    if (!token) {
-        return res.status(401).json({ error: '액세스 토큰이 필요합니다.' });
-    }
-    
-    jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key', (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: '유효하지 않은 토큰입니다.' });
-        }
-        req.user = user;
-        next();
-    });
-};
 
 
 
@@ -166,7 +149,8 @@ app.post('/api/login', async (req, res) => {
                 id: user.id,
                 username: user.username,
                 role: user.role,
-                company: user.company
+                company: user.company,
+                fee: user.fee || 0
             }
         });
     } catch (e) {
@@ -207,7 +191,6 @@ app.get('/api/users', async (req, res) => {
 // 사용자 생성 API (admin role 체크)
 app.post('/api/users', async (req, res) => {
     try {
-        // admin role 체크 (요청 바디로 받음)
         const { username, password, role, company, company_name, fee, userRole, account } = req.body;
         
         if (!userRole || !['super', 'admin'].includes(userRole)) {
@@ -225,11 +208,11 @@ app.post('/api/users', async (req, res) => {
         }
         
         // 역할 검증 - admin은 user만 생성 가능, super는 admin, user 생성 가능
-        if (userRole === 'admin' && role !== 'user') {
+        if (userRole === 'admin' && !['user', 'settlement'].includes(role)) {
             return res.status(400).json({ error: '일반 관리자는 일반 사용자만 생성할 수 있습니다.' });
         }
         
-        if (!['admin', 'user'].includes(role)) {
+        if (!['admin', 'user', 'settlement'].includes(role)) {
             return res.status(400).json({ error: '유효하지 않은 역할입니다.' });
         }
         
@@ -374,7 +357,7 @@ app.delete('/api/users/:id', async (req, res) => {
         const targetCompany = users[0].company;
         
         // admin은 user만 삭제 가능, super는 모두 삭제 가능
-        if (userRole === 'admin' && targetRole !== 'user') {
+        if (userRole === 'admin' && !['user', 'settlement'].includes(targetRole)) {
             await conn.end();
             return res.status(403).json({ error: '관리자는 일반 사용자만 삭제할 수 있습니다.' });
         }

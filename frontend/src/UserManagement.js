@@ -180,7 +180,7 @@ function UserManagement() {
       case 'super': return '슈퍼 관리자';
       case 'admin': return '관리자';
       case 'user': return '일반 사용자';
-      default: return role;
+      case 'settlement': return '정산';      default: return role;
     }
   };
 
@@ -188,7 +188,7 @@ function UserManagement() {
     switch (role) {
       case 'super': return 'role-badge super';
       case 'admin': return 'role-badge admin';
-      case 'user': return 'role-badge user';
+      case 'settlement': return 'role-badge settlement';      case 'user': return 'role-badge user';
       default: return 'role-badge';
     }
   };
@@ -273,7 +273,7 @@ function UserManagement() {
                       </button>
                       {/* 삭제 버튼: super는 user/admin만, admin은 user만 */}
                       {(['super', 'admin'].includes(currentUser?.role) && 
-                        (currentUser?.role === 'super' || (currentUser?.role === 'admin' && user.role === 'user'))) && (
+                        (currentUser?.role === 'super' || currentUser?.role === 'admin' && ['user', 'settlement'].includes(user.role))) && (
                         <button
                           className="delete-user-btn"
                           onClick={() => handleDeleteUser(user)}
@@ -385,7 +385,7 @@ function UserManagement() {
                     <option value="admin">관리자</option>
                   )}
                   <option value="user">일반 사용자</option>
-                </select>
+                  <option value="settlement">정산</option>                </select>
               </div>
             </div>
             <div className="modal-footer">

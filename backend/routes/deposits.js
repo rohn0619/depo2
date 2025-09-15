@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2/promise');
 const dbConfig = require('../config/database');
-const { authenticateToken } = require('../middleware/auth');
 const depositService = require('../services/depositService');
 const { stringToDictionary } = require('../utils/stringParser');
 const logger = require('../utils/logger');
@@ -10,8 +9,10 @@ const logger = require('../utils/logger');
 // 입금내역 조회 API (페이지네이션 + 필터링 지원)
 router.get('/', async (req, res) => {
     try {
-        const { role, company, page, limit, search, selectedCompany, dateFrom, dateTo } = req.query;
-        const result = await depositService.getDeposits({ 
+        const { role, company, page, limit, search, selectedCompany, dateFrom, dateTo, fee } = req.query;
+        
+        // 정산 사용자의 경우 추가 정보 전달
+        const filters = { 
             role, 
             company, 
             page, 
@@ -20,7 +21,18 @@ router.get('/', async (req, res) => {
             selectedCompany, 
             dateFrom, 
             dateTo 
-        });
+        };
+        
+        // 정산 사용자인 경우 수수료 정보 추가 및 자신의 분류만 조회
+        if (role === 'settlement') {
+            filters.userRole = 'settlement';
+            filters.userSettlementFee = parseFloat(fee) || 0;
+            // 정산 사용자는 자신의 분류만 조회
+            filters.company = company;
+            filters.selectedCompany = company;
+        }
+        
+        const result = await depositService.getDeposits(filters);
         
         // 기존 API와의 호환성을 위해 배열 형태도 지원
         if (req.query.format === 'array') {

@@ -24,6 +24,13 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
   const [updatingCheck, setUpdatingCheck] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   
+  // 사용자 정보
+  const [user, setUser] = useState(() => {
+    const userStr = localStorage.getItem('user');
+    const userData = userStr ? JSON.parse(userStr) : null;
+    return userData;
+  });
+  
   // 페이지네이션 상태 (서버 페이지네이션용)
   const [serverTotalPages, setServerTotalPages] = useState(1);
   const [serverTotalCount, setServerTotalCount] = useState(0);
@@ -62,14 +69,17 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
   // 데이터 로딩
   useEffect(() => {
     const fetchData = () => {
-      const user = JSON.parse(localStorage.getItem('user'));
-      
       const params = new URLSearchParams({
         role: user?.role || 'user',
         company: user?.company || '',
         page: page.toString(),
         limit: PAGE_SIZE.toString()
       });
+      
+      // 정산 사용자의 경우 fee 정보 추가
+      if (user?.role === 'settlement' && user?.fee) {
+        params.append('fee', user.fee.toString());
+      }
       
       // 필터링 파라미터 추가
       if (search && search.trim() !== '') {
@@ -124,14 +134,11 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
     
     // 초기 데이터 로딩
     fetchData();
-  }, [page, search, dateFrom, dateTo, selectedCompany]); // 필터링 조건이 변경될 때마다 데이터 다시 로드
+  }, [page, search, dateFrom, dateTo, selectedCompany, user]); // 필터링 조건이 변경될 때마다 데이터 다시 로드
   
   // 데이터 업데이트 트리거에 따른 데이터 업데이트
   useEffect(() => {
     if (dataUpdateTrigger > 0) {
-      console.log('📊 입금내역 테이블 데이터 업데이트 (트리거)', dataUpdateTrigger);
-      
-      const user = JSON.parse(localStorage.getItem('user'));
       
       const params = new URLSearchParams({
         role: user?.role || 'user',
@@ -152,6 +159,11 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
       }
       if (dateTo && dateTo.trim() !== '') {
         params.append('dateTo', dateTo.trim());
+      }
+      
+      // 정산 사용자는 자신의 분류만 조회
+      if (user?.role === 'settlement') {
+        params.set('selectedCompany', user.company);
       }
       
       axios.get(`/api/deposits?${params}`)
@@ -185,12 +197,11 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
           logger.apiError('GET', '/api/deposits', err);
         });
     }
-  }, [dataUpdateTrigger, page, search, dateFrom, dateTo, selectedCompany]);
+  }, [dataUpdateTrigger, page, search, dateFrom, dateTo, selectedCompany, user]);
 
   // 분류값 목록 로딩
   useEffect(() => {
     const fetchCompanies = () => {
-      const user = JSON.parse(localStorage.getItem('user'));
       const params = new URLSearchParams({
         role: user?.role || 'user',
         company: user?.company || ''
@@ -206,7 +217,7 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
         });
     };
     fetchCompanies();
-  }, []);
+  }, [user]);
 
   // 입금내역 페이지 진입 시 뱃지 초기화
   useEffect(() => {
@@ -268,7 +279,6 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
     
     setUpdatingCheck(id);
     try {
-      const user = JSON.parse(localStorage.getItem('user'));
       const params = new URLSearchParams({
         role: user?.role || 'user',
         company: user?.company || ''
@@ -315,7 +325,6 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
     
     setDeletingId(id);
     try {
-      const user = JSON.parse(localStorage.getItem('user'));
       const params = new URLSearchParams({
         role: user?.role || 'user',
         company: user?.company || ''
@@ -365,7 +374,7 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
             onChange={e => setDateTo(e.target.value)}
           />
         </div>
-        {['admin', 'super'].includes(JSON.parse(localStorage.getItem('user'))?.role) && (
+        {['admin', 'super'].includes(user?.role) && (
           <div className="searchbar-right">
             <select
               value={selectedCompany}
@@ -376,6 +385,13 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                 <option key={index} value={company}>{company}</option>
               ))}
             </select>
+          </div>
+        )}
+        {user?.role === 'settlement' && (
+          <div className="searchbar-right">
+            <span className="settlement-company-info">
+              담당 분류: <strong>{user.company}</strong>
+            </span>
           </div>
         )}
       </div>
@@ -394,7 +410,8 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                 <th>구분</th>
                 <th>금액</th>
                 <th>잔액</th>
-                <th>수수료</th>
+                {user?.role !== 'settlement' && <th>수수료</th>}
+                {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && <th>정산수수료</th>}
                 <th>입금자명</th>
                 <th>분류</th>
                 <th>사용자명</th>
@@ -405,10 +422,10 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
             </thead>
             <tbody>
               {data.length === 0 ? (
-                <tr><td colSpan={13} style={{ color: '#888' }}>검색 결과가 없습니다.</td></tr>
+                <tr><td colSpan={user?.role === 'settlement' ? 13 : (user?.role === 'admin' || user?.role === 'super') ? 14 : 13} style={{ color: '#888' }}>검색 결과가 없습니다.</td></tr>
               ) : (
-                data.map((row) => (
-                  <tr key={row.id} className={
+                data.map((row, index) => (
+                  <tr key={`${row.id}-${index}`} className={
                     isProblematicRow(row) ? 'problematic-row' : 
                     isFiftyWonRow(row) ? 'fifty-won-row' : ''
                   }>
@@ -422,7 +439,27 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                     </td>
                     <td>{formatAmount(row.amount)}</td>
                     <td>{row.balance ? formatAmount(row.balance) : '-'}</td>
-                    <td>{row.transaction_type === 1 && row.fee_amount > 0 ? formatAmount(row.fee_amount) : '-'}</td>
+                    {user?.role !== 'settlement' && (
+                      <td>{row.transaction_type === 1 && row.fee_amount > 0 ? formatAmount(row.fee_amount) : '-'}</td>
+                    )}
+                    {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
+                      <td>
+                        {(() => {
+                          if (row.transaction_type === 1 && row.fee_amount > 0) {
+                            // 정산 사용자의 경우 자신의 fee 사용
+                            if (user?.role === 'settlement' && user?.fee) {
+                              const settlementFee = Math.round((row.fee_amount * user.fee) / 100);
+                              return formatAmount(settlementFee);
+                            }
+                            // 관리자/슈퍼관리자의 경우 해당 분류의 정산 사용자 fee 사용
+                            else if ((user?.role === 'admin' || user?.role === 'super') && row.settlement_fee !== undefined) {
+                              return formatAmount(row.settlement_fee || 0);
+                            }
+                          }
+                          return (user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') ? '0' : '-';
+                        })()}
+                      </td>
+                    )}
                     <td>{row.sender}</td>
                     <td>{row.company}</td>
                     <td>{row.company_name || '-'}</td>
@@ -472,44 +509,62 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
             )}
             
             {/* 페이지 번호들 */}
-            {Array.from({ length: serverTotalPages }, (_, i) => {
-              const pageNum = i + 1;
+            {(() => {
+              const pages = [];
+              let lastPageAdded = 0;
               
-              // 항상 표시할 페이지들
-              if (pageNum === 1 || pageNum === serverTotalPages) {
-                return (
+              // 첫 페이지 항상 표시
+              if (serverTotalPages > 0) {
+                pages.push(
                   <button
-                    key={pageNum}
-                    className={page === pageNum ? 'active' : 'pagination-btn'}
-                    onClick={() => handlePageChange(pageNum)}
-                    disabled={page === pageNum}
+                    key={1}
+                    className={page === 1 ? 'active' : 'pagination-btn'}
+                    onClick={() => handlePageChange(1)}
+                    disabled={page === 1}
                   >
-                    {pageNum}
+                    1
                   </button>
                 );
+                lastPageAdded = 1;
               }
               
               // 현재 페이지 주변 표시
-              if (pageNum >= page - 1 && pageNum <= page + 1) {
-                return (
+              for (let i = Math.max(2, page - 1); i <= Math.min(serverTotalPages - 1, page + 1); i++) {
+                if (i > lastPageAdded + 1) {
+                  pages.push(<span key={`ellipsis-${i}`} className="pagination-ellipsis">...</span>);
+                }
+                pages.push(
                   <button
-                    key={pageNum}
-                    className={page === pageNum ? 'active' : 'pagination-btn'}
-                    onClick={() => handlePageChange(pageNum)}
-                    disabled={page === pageNum}
+                    key={i}
+                    className={page === i ? 'active' : 'pagination-btn'}
+                    onClick={() => handlePageChange(i)}
+                    disabled={page === i}
                   >
-                    {pageNum}
+                    {i}
+                  </button>
+                );
+                lastPageAdded = i;
+              }
+              
+              // 마지막 페이지 표시 (총 페이지가 1보다 클 때만)
+              if (serverTotalPages > 1) {
+                if (serverTotalPages > lastPageAdded + 1) {
+                  pages.push(<span key="ellipsis-end" className="pagination-ellipsis">...</span>);
+                }
+                pages.push(
+                  <button
+                    key={serverTotalPages}
+                    className={page === serverTotalPages ? 'active' : 'pagination-btn'}
+                    onClick={() => handlePageChange(serverTotalPages)}
+                    disabled={page === serverTotalPages}
+                  >
+                    {serverTotalPages}
                   </button>
                 );
               }
               
-              // 생략 표시
-              if (pageNum === page - 2 || pageNum === page + 2) {
-                return <span key={pageNum} className="pagination-ellipsis">...</span>;
-              }
-              
-              return null;
-            })}
+              return pages;
+            })()}
             
             {/* 다음 페이지 버튼 */}
             {hasNext && (

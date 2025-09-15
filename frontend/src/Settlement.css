@@ -440,4 +440,96 @@
   color: #666;
   font-style: italic;
   font-size: 16px;
+}
+
+/* 정산 사용자 전용 스타일 */
+.settlement-info {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.settlement-company {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.settlement-fee {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.settlement-card {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  border: none;
+  box-shadow: 0 8px 32px rgba(255, 154, 158, 0.3);
+}
+
+.settlement-card h3 {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.settlement-card .stat-label {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.settlement-card .stat-value {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.settlement-card .stat-item.highlight {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  border: 2px solid #ff6b6b;
+}
+
+.settlement-card .stat-item.highlight .stat-label {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.settlement-card .stat-item.highlight .stat-value {
+  color: #e74c3c;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.settlement-info-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 30px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+.settlement-info-card h3 {
+  margin: 0 0 20px 0;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.info-content p {
+  margin: 12px 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.info-content strong {
+  font-weight: 700;
+  color: #ffd700;
 } 

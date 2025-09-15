@@ -31,7 +31,7 @@ function getServerDateSubtract(days) {
     return `${year}-${month}-${day}`; // YYYY-MM-DD
 }
 
-async function getBasicStats(user, period, company = null) {
+async function getBasicStats(user, period, company = null, settlementFee = null) {
     const conn = await mysql.createConnection(dbConfig);
     
     let whereClause = '1=1';
@@ -41,8 +41,8 @@ async function getBasicStats(user, period, company = null) {
     if (user.role === 'user') {
         whereClause += ' AND d.company = ?';
         params.push(user.company);
-    } else if (company && user.role !== 'user') {
-        // 관리자는 특정 분류 필터링 가능
+    } else if (company) {
+        // 관리자나 정산 사용자는 특정 분류 필터링 가능
         whereClause += ' AND d.company = ?';
         params.push(company);
     }
@@ -79,20 +79,36 @@ async function getBasicStats(user, period, company = null) {
                 WHEN u.fee IS NOT NULL AND u.fee > 0 
                 THEN d.amount * u.fee / 100 
                 ELSE 0 
-            END)) as total_fee
+            END)) as total_fee,
+            ROUND(SUM(
+                CASE 
+                    WHEN u.fee IS NOT NULL AND u.fee > 0 THEN
+                        (d.amount * u.fee / 100) * (
+                            SELECT COALESCE(SUM(s.fee), 0) / 100
+                            FROM users s 
+                            WHERE s.company = d.company AND s.role = 'settlement'
+                        )
+                    ELSE 0 
+                END
+            )) as settlement_fee
         FROM deposits d
-        LEFT JOIN users u ON d.company = u.company
+        LEFT JOIN users u ON d.company = u.company AND u.role != 'settlement'
         WHERE ${whereClause} ${dateFilter} AND d.transaction_type = 1
     `;
     
+    // 정산 수수료는 서브쿼리로 계산하므로 외부 파라미터 불필요
+    const finalParams = [...params];
+    
     try {
-        const [rows] = await conn.query(query, params);
+        
+        const [rows] = await conn.query(query, finalParams);
         await conn.end();
         
         return {
             count: rows[0].count || 0,
             total_amount: rows[0].total_amount || 0,
-            total_fee: rows[0].total_fee || 0
+            total_fee: rows[0].total_fee || 0,
+            settlement_fee: rows[0].settlement_fee || 0
         };
     } catch (error) {
         await conn.end();
@@ -294,7 +310,7 @@ async function getSenderAnalysis(user, company = null, month = null) {
             FROM deposits 
             WHERE ${whereClause.replace(/d\./g, '')} AND transaction_type = 1
         ) d
-        LEFT JOIN users u ON d.company = u.company
+        LEFT JOIN users u ON d.company = u.company AND u.role != 'settlement'
         GROUP BY d.sender${user.role !== 'user' ? ', d.company' : ''}, u.company_name
         ORDER BY total_amount DESC
         LIMIT 10
@@ -346,10 +362,21 @@ async function getCompanyAnalysis(user, month = null) {
                 THEN d.amount * u.fee / 100 
                 ELSE 0 
             END)) as total_fee,
+            ROUND(SUM(
+                CASE 
+                    WHEN d.transaction_type = 1 AND u.fee IS NOT NULL AND u.fee > 0 THEN
+                        (d.amount * u.fee / 100) * (
+                            SELECT COALESCE(SUM(s.fee), 0) / 100
+                            FROM users s 
+                            WHERE s.company = d.company AND s.role = 'settlement'
+                        )
+                    ELSE 0 
+                END
+            )) as total_settlement_fee,
             COUNT(CASE WHEN d.transaction_type = 0 THEN 1 END) as withdrawal_count,
             SUM(CASE WHEN d.transaction_type = 0 THEN d.amount ELSE 0 END) as total_withdrawal
         FROM deposits d
-        LEFT JOIN users u ON d.company = u.company
+        LEFT JOIN users u ON d.company = u.company AND u.role != 'settlement'
         WHERE ${whereClause}
         GROUP BY d.company, u.company_name
         ORDER BY total_deposit DESC

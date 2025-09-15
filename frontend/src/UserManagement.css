@@ -403,3 +403,7 @@
 .fee-input[type=number] {
   -moz-appearance: textfield;
 } 
+.role-badge.settlement {
+  background: #f39c12;
+  color: white;
+}

@@ -36,15 +36,20 @@ async function getDeposits(filters = {}) {
                DATE_FORMAT(d.date, '%Y-%m-%d %H:%i:%s') as date,
                d.bank, d.amount, d.balance, d.transaction_type,
                d.sender, d.company, d.sms_raw, d.is_checked,
-               d.created_at, u.fee, u.company_name
-        FROM deposits d 
-        LEFT JOIN users u ON d.company = u.company
+               d.created_at
+        FROM deposits d
     `;
     let params = [];
     let whereConditions = [];
     
     // 일반 사용자는 자신의 분류와 일치하는 입금내역만 조회
     if (filters.role === 'user' && filters.company && filters.company.trim() !== '') {
+        whereConditions.push('d.company = ?');
+        params.push(filters.company);
+    }
+    
+    // 정산 사용자는 자신의 분류와 일치하는 입금내역만 조회
+    if (filters.role === 'settlement' && filters.company && filters.company.trim() !== '') {
         whereConditions.push('d.company = ?');
         params.push(filters.company);
     }
@@ -121,36 +126,120 @@ async function getDeposits(filters = {}) {
         
         await conn.end();
         
-        // 프론트 호환을 위해 데이터 포맷 변환 및 수수료 계산
-        const deposits = rows.map(row => {
-            const fee = row.fee || 0;
-            // transaction_type은 필수 필드
-            if (row.transaction_type === null || row.transaction_type === undefined) {
-                throw new Error(`입금내역 ID ${row.id}의 transaction_type이 설정되지 않았습니다.`);
-            }
+        // 분류별 사용자 정보 가져오기 (중복 제거를 위해)
+        const conn2 = await mysql.createConnection(dbConfig);
+        let userInfoQuery = `
+            SELECT company, fee, company_name 
+            FROM users 
+            WHERE role != 'settlement' AND company IS NOT NULL AND company != ''
+        `;
+        
+        // 정산 사용자 정보도 가져오기 (관리자/슈퍼관리자를 위해)
+        let settlementUserQuery = `
+            SELECT company, fee, company_name 
+            FROM users 
+            WHERE role = 'settlement' AND company IS NOT NULL AND company != ''
+        `;
+        
+        let deposits;
+        
+        // 정산 사용자의 경우 해당 분류의 사용자 정보만 가져오기
+        if (filters.role === 'settlement' && filters.company) {
+            userInfoQuery += ' AND company = ?';
+            const [userRows] = await conn2.query(userInfoQuery, [filters.company]);
+            const [settlementRows] = await conn2.query(settlementUserQuery + ' AND company = ?', [filters.company]);
+            await conn2.end();
             
-            // 출금의 경우 수수료 계산하지 않음
-            const feeAmount = row.transaction_type === 1 ? Math.round((row.amount * fee) / 100) : 0;
-            const netAmount = row.transaction_type === 1 ? row.amount - feeAmount : row.amount;
+            // 프론트 호환을 위해 데이터 포맷 변환 및 수수료 계산
+            deposits = rows.map(row => {
+                const userInfo = userRows.find(u => u.company === row.company);
+                const fee = userInfo ? userInfo.fee : 0;
+                // transaction_type은 필수 필드
+                if (row.transaction_type === null || row.transaction_type === undefined) {
+                    throw new Error(`입금내역 ID ${row.id}의 transaction_type이 설정되지 않았습니다.`);
+                }
+                
+                // 출금의 경우 수수료 계산하지 않음
+                const feeAmount = row.transaction_type === 1 ? Math.round((row.amount * fee) / 100) : 0;
+                const netAmount = row.transaction_type === 1 ? row.amount - feeAmount : row.amount;
+                
+                // 정산 수수료 계산 (하나의 분류에 여러 정산 사용자가 있을 경우 합산)
+                let settlementFee = 0;
+                if (row.transaction_type === 1 && feeAmount > 0) {
+                    const settlementUsersForCompany = settlementRows.filter(u => u.company === row.company);
+                    settlementFee = settlementUsersForCompany.reduce((total, settlementUser) => {
+                        return total + Math.round((feeAmount * settlementUser.fee) / 100);
+                    }, 0);
+                }
+                
+                return {
+                    id: row.id,
+                    date: row.date,
+                    bank: row.bank,
+                    amount: row.amount,
+                    balance: row.balance,
+                    transaction_type: row.transaction_type,
+                    fee: row.transaction_type === 1 ? fee : 0,
+                    fee_amount: feeAmount,
+                    net_amount: netAmount,
+                    settlement_fee: settlementFee,
+                    sender: row.sender,
+                    company: row.company,
+                    company_name: userInfo ? userInfo.company_name : null,
+                    sms_raw: row.sms_raw,
+                    is_checked: row.is_checked,
+                    created_at: row.created_at
+                };
+            });
+        } else {
+            // 일반 사용자나 관리자의 경우
+            const [userRows] = await conn2.query(userInfoQuery);
+            const [settlementRows] = await conn2.query(settlementUserQuery);
+            await conn2.end();
             
-            return {
-                id: row.id,
-                date: row.date,
-                bank: row.bank,
-                amount: row.amount,
-                balance: row.balance,
-                transaction_type: row.transaction_type,
-                fee: row.transaction_type === 1 ? fee : 0,
-                fee_amount: feeAmount,
-                net_amount: netAmount,
-                sender: row.sender,
-                company: row.company,
-                company_name: row.company_name,
-                sms_raw: row.sms_raw,
-                is_checked: row.is_checked,
-                created_at: row.created_at
-            };
-        });
+            // 프론트 호환을 위해 데이터 포맷 변환 및 수수료 계산
+            deposits = rows.map(row => {
+                const userInfo = userRows.find(u => u.company === row.company);
+                const fee = userInfo ? userInfo.fee : 0;
+                
+                // transaction_type은 필수 필드
+                if (row.transaction_type === null || row.transaction_type === undefined) {
+                    throw new Error(`입금내역 ID ${row.id}의 transaction_type이 설정되지 않았습니다.`);
+                }
+                
+                // 출금의 경우 수수료 계산하지 않음
+                const feeAmount = row.transaction_type === 1 ? Math.round((row.amount * fee) / 100) : 0;
+                const netAmount = row.transaction_type === 1 ? row.amount - feeAmount : row.amount;
+                
+                // 정산 수수료 계산 (하나의 분류에 여러 정산 사용자가 있을 경우 합산)
+                let settlementFee = 0;
+                if (row.transaction_type === 1 && feeAmount > 0) {
+                    const settlementUsersForCompany = settlementRows.filter(u => u.company === row.company);
+                    settlementFee = settlementUsersForCompany.reduce((total, settlementUser) => {
+                        return total + Math.round((feeAmount * settlementUser.fee) / 100);
+                    }, 0);
+                }
+                
+                return {
+                    id: row.id,
+                    date: row.date,
+                    bank: row.bank,
+                    amount: row.amount,
+                    balance: row.balance,
+                    transaction_type: row.transaction_type,
+                    fee: row.transaction_type === 1 ? fee : 0,
+                    fee_amount: feeAmount,
+                    net_amount: netAmount,
+                    settlement_fee: settlementFee,
+                    sender: row.sender,
+                    company: row.company,
+                    company_name: userInfo ? userInfo.company_name : null,
+                    sms_raw: row.sms_raw,
+                    is_checked: row.is_checked,
+                    created_at: row.created_at
+                };
+            });
+        }
         
         // 페이지네이션 정보 포함하여 반환
         return {
