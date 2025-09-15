@@ -5,6 +5,7 @@ const dbConfig = require('../config/database');
 const depositService = require('../services/depositService');
 const { stringToDictionary } = require('../utils/stringParser');
 const logger = require('../utils/logger');
+const XLSX = require('xlsx');
 
 // 입금내역 조회 API (페이지네이션 + 필터링 지원)
 router.get('/', async (req, res) => {
@@ -407,6 +408,104 @@ router.get('/poll', async (req, res) => {
             uncheckedCount: 0, 
             error: '조회 실패' 
         });
+    }
+});
+
+// 엑셀 다운로드 API
+router.get('/export-excel', async (req, res) => {
+    try {
+        const { role, company, search, selectedCompany, dateFrom, dateTo, fee } = req.query;
+        
+        // 필터링 조건 설정
+        const filters = { 
+            role, 
+            company, 
+            search, 
+            selectedCompany, 
+            dateFrom, 
+            dateTo,
+            limit: 10000 // 엑셀 다운로드는 최대 1만건으로 제한
+        };
+        
+        // 정산 사용자인 경우 수수료 정보 추가 및 자신의 분류만 조회
+        if (role === 'settlement') {
+            filters.userRole = 'settlement';
+            filters.userSettlementFee = parseFloat(fee) || 0;
+            filters.company = company;
+            filters.selectedCompany = company;
+        }
+        
+        const result = await depositService.getDeposits(filters);
+        const deposits = result.deposits;
+        
+        // 엑셀 데이터 생성
+        const excelData = deposits.map(row => {
+            const excelRow = {
+                '번호': row.id,
+                '날짜': row.date,
+                '은행': row.bank,
+                '구분': row.transaction_type === 1 ? '입금' : '출금',
+                '금액': row.amount,
+                '잔액': row.balance || 0,
+                '입금자명': row.sender,
+                '분류': row.company,
+                '사용자명': row.company_name || '-'
+            };
+            
+            // 정산 사용자가 아닌 경우 수수료 컬럼 추가
+            if (role !== 'settlement') {
+                excelRow['수수료'] = row.transaction_type === 1 && row.fee_amount > 0 ? row.fee_amount : 0;
+            }
+            
+            // 정산 사용자이거나 관리자/슈퍼관리자인 경우 정산수수료 컬럼 추가
+            if (role === 'settlement' || role === 'admin' || role === 'super') {
+                excelRow['정산수수료'] = row.transaction_type === 1 && row.settlement_fee > 0 ? row.settlement_fee : 0;
+            }
+            
+            return excelRow;
+        });
+        
+        // 워크북 생성
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(excelData);
+        
+        // 컬럼 너비 설정
+        const colWidths = [
+            { wch: 8 },  // 번호
+            { wch: 20 }, // 날짜
+            { wch: 15 }, // 은행
+            { wch: 8 },  // 구분
+            { wch: 15 }, // 금액
+            { wch: 15 }, // 잔액
+            { wch: 12 }, // 수수료 (정산 사용자 제외)
+            { wch: 12 }, // 정산수수료 (일반 사용자 제외)
+            { wch: 15 }, // 입금자명
+            { wch: 15 }, // 분류
+            { wch: 15 }  // 사용자명
+        ];
+        ws['!cols'] = colWidths;
+        
+        XLSX.utils.book_append_sheet(wb, ws, '입출금내역');
+        
+        // 파일명 생성 (현재 날짜 포함)
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
+        const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '');
+        const filename = `입출금내역_${dateStr}_${timeStr}.xlsx`;
+        
+        // 엑셀 파일 생성
+        const excelBuffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+        
+        // 응답 헤더 설정
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+        res.setHeader('Content-Length', excelBuffer.length);
+        
+        res.send(excelBuffer);
+        
+    } catch (e) {
+        logger.business('엑셀 다운로드', { role, company, search, selectedCompany, dateFrom, dateTo }, e);
+        res.status(500).json({ error: '엑셀 다운로드 실패', message: e.message });
     }
 });
 

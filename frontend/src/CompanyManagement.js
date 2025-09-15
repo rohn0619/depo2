@@ -80,15 +80,16 @@ function CompanyManagement() {
   };
 
   const handleDeleteCompany = async (id) => {
-    if (!window.confirm('정말로 이 분류를 삭제하시겠습니까?')) {
+    if (!window.confirm('정말로 이 분류를 삭제하시겠습니까?\n\n⚠️ 주의: 해당 분류값을 가진 모든 입출금 내역과 사용자도 함께 삭제됩니다.')) {
       return;
     }
 
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      await axios.delete(`/api/companies/${id}?role=${user?.role}`);
+      const response = await axios.delete(`/api/companies/${id}?role=${user?.role}`);
       
-      alert('분류가 삭제되었습니다.');
+      // 서버에서 반환하는 메시지 사용
+      alert(response.data.message || '분류가 삭제되었습니다.');
       fetchCompanies(); // 목록 새로고침
     } catch (err) {
       logger.userAction('분류 삭제', { id }, err);

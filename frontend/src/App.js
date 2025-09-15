@@ -14,17 +14,6 @@ import logger from './utils/logger';
 import pollingClient from './utils/pollingClient';
 import { useMaintenanceCheck, toggleMaintenanceMode } from './utils/maintenanceCheck';
 
-function EmptyPage() {
-  return (
-    <div className="empty-page">
-      <h2>준비 중</h2>
-      <p>추후 기능이 추가될 예정입니다.</p>
-    </div>
-  );
-}
-
-
-
 function AppContent() {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(() => {

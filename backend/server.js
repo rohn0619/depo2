@@ -69,14 +69,6 @@ app.use('/api/settlement', settlementRoutes);
 app.use('/api/sse', sseRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 
-// 환경 변수 검증
-function requireEnv(name) {
-    const value = process.env[name];
-    if (!value) {
-        console.warn(`⚠️  환경 변수 ${name}가 설정되지 않았습니다. 기본값을 사용합니다.`);
-    }
-    return value;
-}
 
 
 
@@ -539,18 +531,84 @@ app.delete('/api/companies/:id', async (req, res) => {
         
         const conn = await mysql.createConnection(dbConfig);
         
-        // Company 존재 여부 확인
-        const [company] = await conn.query('SELECT id FROM companies WHERE id = ?', [companyId]);
+        // Company 존재 여부 확인 및 분류명 가져오기
+        const [company] = await conn.query('SELECT id, name FROM companies WHERE id = ?', [companyId]);
         if (company.length === 0) {
             await conn.end();
             return res.status(404).json({ error: '분류를 찾을 수 없습니다.' });
         }
         
-        // Company 삭제
-        await conn.query('DELETE FROM companies WHERE id = ?', [companyId]);
+        const companyName = company[0].name;
+        
+        // 해당 분류값을 가진 입출금 내역 개수 확인
+        const [depositsCount] = await conn.query(
+            'SELECT COUNT(*) as count FROM deposits WHERE company = ?', 
+            [companyName]
+        );
+        
+        // 해당 분류값을 가진 사용자 개수 확인
+        const [usersCount] = await conn.query(
+            'SELECT COUNT(*) as count FROM users WHERE company = ?', 
+            [companyName]
+        );
+        
+        const depositsToDelete = depositsCount[0].count;
+        const usersToDelete = usersCount[0].count;
+        
+        // 디버깅을 위한 로그
+        console.log(`분류 삭제 디버깅: companyName=${companyName}, depositsToDelete=${depositsToDelete}, usersToDelete=${usersToDelete}`);
+        
+        // 트랜잭션 시작
+        await conn.beginTransaction();
+        
+        try {
+            let actualDeletedDeposits = 0;
+            let actualDeletedUsers = 0;
+            
+            // 1. 해당 분류값을 가진 입출금 내역 삭제
+            if (depositsToDelete > 0) {
+                const [depositResult] = await conn.query('DELETE FROM deposits WHERE company = ?', [companyName]);
+                actualDeletedDeposits = depositResult.affectedRows;
+                console.log(`입출금 내역 삭제 결과: ${actualDeletedDeposits}건 삭제됨`);
+            }
+            
+            // 2. 해당 분류값을 가진 사용자 삭제
+            if (usersToDelete > 0) {
+                const [userResult] = await conn.query('DELETE FROM users WHERE company = ?', [companyName]);
+                actualDeletedUsers = userResult.affectedRows;
+                console.log(`사용자 삭제 결과: ${actualDeletedUsers}명 삭제됨`);
+            }
+            
+            // 3. Company 삭제
+            await conn.query('DELETE FROM companies WHERE id = ?', [companyId]);
+            
+            // 트랜잭션 커밋
+            await conn.commit();
+            
+            let message = '분류가 삭제되었습니다.';
+            if (actualDeletedDeposits > 0 && actualDeletedUsers > 0) {
+                message = `분류가 삭제되었습니다. (관련 입출금 내역 ${actualDeletedDeposits}건, 사용자 ${actualDeletedUsers}명도 함께 삭제됨)`;
+            } else if (actualDeletedDeposits > 0) {
+                message = `분류가 삭제되었습니다. (관련 입출금 내역 ${actualDeletedDeposits}건도 함께 삭제됨)`;
+            } else if (actualDeletedUsers > 0) {
+                message = `분류가 삭제되었습니다. (관련 사용자 ${actualDeletedUsers}명도 함께 삭제됨)`;
+            }
+            
+            res.json({ 
+                success: true, 
+                message: message,
+                deletedDeposits: actualDeletedDeposits,
+                deletedUsers: actualDeletedUsers
+            });
+            
+        } catch (transactionError) {
+            // 트랜잭션 롤백
+            await conn.rollback();
+            throw transactionError;
+        }
+        
         await conn.end();
         
-        res.json({ success: true, message: '분류가 삭제되었습니다.' });
     } catch (error) {
         logger.business('Company 삭제', { companyId, userRole }, error);
         res.status(500).json({ error: '서버 오류가 발생했습니다.' });

@@ -23,6 +23,7 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
   const [modalContent, setModalContent] = useState('');
   const [updatingCheck, setUpdatingCheck] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [downloadingExcel, setDownloadingExcel] = useState(false);
   
   // 사용자 정보
   const [user, setUser] = useState(() => {
@@ -351,6 +352,69 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
     }
   };
 
+  // 엑셀 다운로드 함수
+  const handleExcelDownload = async () => {
+    if (downloadingExcel) return; // 중복 클릭 방지
+    
+    setDownloadingExcel(true);
+    try {
+      const params = new URLSearchParams({
+        role: user?.role || 'user',
+        company: user?.company || ''
+      });
+      
+      // 정산 사용자의 경우 fee 정보 추가
+      if (user?.role === 'settlement' && user?.fee) {
+        params.append('fee', user.fee.toString());
+      }
+      
+      // 현재 필터 조건 추가
+      if (search && search.trim() !== '') {
+        params.append('search', search.trim());
+      }
+      if (selectedCompany && selectedCompany.trim() !== '') {
+        params.append('selectedCompany', selectedCompany.trim());
+      }
+      if (dateFrom && dateFrom.trim() !== '') {
+        params.append('dateFrom', dateFrom.trim());
+      }
+      if (dateTo && dateTo.trim() !== '') {
+        params.append('dateTo', dateTo.trim());
+      }
+      
+      const response = await axios.get(`/api/deposits/export-excel?${params}`, {
+        responseType: 'blob'
+      });
+      
+      // 파일 다운로드
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Content-Disposition 헤더에서 파일명 추출
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = '입출금내역.xlsx';
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        if (filenameMatch && filenameMatch[1]) {
+          filename = decodeURIComponent(filenameMatch[1].replace(/['"]/g, ''));
+        }
+      }
+      
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+    } catch (err) {
+      logger.userAction('엑셀 다운로드', { search, selectedCompany, dateFrom, dateTo }, err);
+      alert('엑셀 다운로드에 실패했습니다.');
+    } finally {
+      setDownloadingExcel(false);
+    }
+  };
+
   return (
     <div className="deposit-table-container">
       <h2>입/출금 내역</h2>
@@ -373,9 +437,7 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
           />
-        </div>
-        {['admin', 'super'].includes(user?.role) && (
-          <div className="searchbar-right">
+          {['admin', 'super'].includes(user?.role) && (
             <select
               value={selectedCompany}
               onChange={e => setSelectedCompany(e.target.value)}
@@ -385,15 +447,23 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                 <option key={index} value={company}>{company}</option>
               ))}
             </select>
-          </div>
-        )}
-        {user?.role === 'settlement' && (
-          <div className="searchbar-right">
+          )}
+        </div>
+        <div className="searchbar-right">
+          {user?.role === 'settlement' && (
             <span className="settlement-company-info">
               담당 분류: <strong>{user.company}</strong>
             </span>
-          </div>
-        )}
+          )}
+          <button 
+            className="excel-download-btn"
+            onClick={handleExcelDownload}
+            disabled={downloadingExcel}
+            type="button"
+          >
+            {downloadingExcel ? '다운로드 중...' : '엑셀 다운로드'}
+          </button>
+        </div>
       </div>
       {loading ? (
         <div style={{ textAlign: 'center', color: '#888', padding: '40px 0' }}>로딩 중...</div>
