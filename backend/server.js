@@ -35,8 +35,8 @@ app.use(cors({
         
         // 프로덕션 환경에서 허용할 도메인들
         const allowedOrigins = [
-              'https://sms-set.homeretech.com',
-  'http://sms-set.homeretech.com'
+            'https://demo.homeretech.com',
+            'http://demo.homeretech.com'
         ];
         
         // origin이 없거나 허용된 도메인인 경우
