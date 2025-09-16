@@ -669,10 +669,10 @@ app.listen(port, '0.0.0.0', async () => {
         port,
         environment: process.env.NODE_ENV || 'development',
         envFileLoaded: !!process.env.NODE_ENV,
-        apiServer: 'https://sms-api.homeretech.com',
-        adminPage: 'https://sms-set.homeretech.com',
-        apiEndpoint: 'https://sms-api.homeretech.com/api/parse',
-        healthCheck: 'https://sms-api.homeretech.com/api/health',
+        apiServer: 'https://demo-api.homeretech.com',
+        adminPage: 'https://demo.homeretech.com',
+        apiEndpoint: 'https://demo-api.homeretech.com/api/parse',
+        healthCheck: 'https://demo-api.homeretech.com/api/health',
         systemTime: {
             utc: now.toISOString(),
             local: now.toString(),
@@ -688,10 +688,10 @@ app.listen(port, '0.0.0.0', async () => {
     console.log(`환경: ${process.env.NODE_ENV || 'development'}`);
     console.log(`환경 변수 파일: ${process.env.NODE_ENV ? '로드됨' : '로드되지 않음'}`);
     console.log(`CORS: 모든 origin 허용 (임시 설정)`);
-    console.log(`API 서버: https://sms-api.homeretech.com`);
-    console.log(`관리자 페이지: https://sms-set.homeretech.com`);
-    console.log(`API 엔드포인트: https://sms-api.homeretech.com/api/parse`);
-    console.log(`헬스체크: https://sms-api.homeretech.com/api/health`);
+    console.log(`API 서버: https://demo-api.homeretech.com`);
+    console.log(`관리자 페이지: https://demo.homeretech.com`);
+    console.log(`API 엔드포인트: https://demo-api.homeretech.com/api/parse`);
+    console.log(`헬스체크: https://demo-api.homeretech.com/api/health`);
     console.log('='.repeat(60));
     console.log('📅 시스템 시간 정보:');
     console.log(`   UTC: ${now.toISOString()}`);

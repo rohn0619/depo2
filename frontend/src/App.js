@@ -7,7 +7,7 @@ import DepositTable from './DepositTable';
 import UserManagement from './UserManagement';
 import CompanyManagement from './CompanyManagement';
 import Settlement from './Settlement';
-import Manual from './Manual';
+// import Manual from './Manual';
 import Maintenance from './Maintenance';
 import API_BASE_URL from './config';
 import logger from './utils/logger';
@@ -388,11 +388,11 @@ function AppContent() {
                 <li>
                   <NavLink to="/settlement" className={({ isActive }) => isActive ? 'active' : ''}>정산</NavLink>
                 </li>
-                {user?.role !== 'user' && (
+                {/* {user?.role !== 'user' && (
                   <li>
                     <NavLink to="/manual" className={({ isActive }) => isActive ? 'active' : ''}>📖 메뉴얼</NavLink>
                   </li>
-                )}
+                )} */}
                 {['super', 'admin'].includes(user?.role) && (
                   <li>
                     <NavLink to="/users" className={({ isActive }) => isActive ? 'active' : ''}>사용자 관리</NavLink>
@@ -420,7 +420,7 @@ function AppContent() {
           <Route path="/" element={user?.role === 'settlement' ? <Navigate to="/deposits" replace /> : <MessageTest />} />
           <Route path="/deposits" element={<DepositTable setUnreadCount={setUnreadCount} dataUpdateTrigger={dataUpdateTrigger} />} />
           <Route path="/settlement" element={<Settlement />} />
-          <Route path="/manual" element={<Manual />} />
+          {/* <Route path="/manual" element={<Manual />} /> */}
           <Route path="/users" element={<UserManagement />} />
           <Route path="/companies" element={<CompanyManagement />} />
           <Route path="*" element={<Navigate to={user?.role === 'settlement' ? "/deposits" : "/"} replace />} />
