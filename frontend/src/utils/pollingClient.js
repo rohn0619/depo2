@@ -258,13 +258,6 @@ class PollingClient {
             });
             
             // 매칭 회원 여부에 따라 다른 알림
-            console.log('🔍 폴링 클라이언트에서 받은 데이터:', {
-                id: deposit.id,
-                is_matching_member: deposit.is_matching_member,
-                requires_new_alert: deposit.requires_new_alert,
-                sender: deposit.sender
-            });
-            
             if (deposit.is_matching_member === 1 || deposit.is_matching_member === true) {
                 // 매칭 회원: 기존 "새로운 내역이 있습니다" 알림
                 logger.info('💰 매칭 회원 입금 발견!', { 

@@ -285,19 +285,9 @@ async function stringToDictionary(inputString, approvedCompanies = [], checkMatc
     // 매칭 회원 체크 (입금인 경우만)
     if (result.transaction_type === 'deposit' && result.company && result.sender_name && checkMatchingMember) {
         try {
-            console.log('🔍 매칭 회원 체크 시작:', {
-                company: result.company,
-                sender_name: result.sender_name
-            });
-            
             // sender_name을 account_holder로 사용하여 매칭 회원 체크
             const isMatchingMember = await checkMatchingMember(result.company, result.sender_name);
             result.is_matching_member = isMatchingMember;
-            
-            console.log('✅ 매칭 회원 체크 결과:', {
-                is_matching_member: isMatchingMember,
-                requires_new_alert: !isMatchingMember
-            });
             
             // 매칭 회원이 아닌 경우 새로운 알림음 플래그 설정
             if (!isMatchingMember) {
@@ -309,12 +299,6 @@ async function stringToDictionary(inputString, approvedCompanies = [], checkMatc
             result.requires_new_alert = false;
         }
     } else {
-        console.log('⚠️ 매칭 회원 체크 건너뜀:', {
-            transaction_type: result.transaction_type,
-            company: result.company,
-            sender_name: result.sender_name,
-            checkMatchingMember: !!checkMatchingMember
-        });
         result.is_matching_member = false;
         result.requires_new_alert = false;
     }

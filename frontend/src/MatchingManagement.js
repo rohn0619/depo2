@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './MatchingManagement.css';
 import logger from './utils/logger';
+import API_BASE_URL from './config';
+
+// axios 기본 설정
+axios.defaults.baseURL = API_BASE_URL;
 
 function MatchingManagement() {
   const [matchings, setMatchings] = useState([]);
@@ -30,6 +34,12 @@ function MatchingManagement() {
   const [approvedCompanies, setApprovedCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [excelUploadModal, setExcelUploadModal] = useState({ 
+    open: false, 
+    file: null, 
+    uploading: false 
+  });
+  const [uploadResults, setUploadResults] = useState(null);
 
   useEffect(() => {
     // 현재 로그인한 사용자 정보 가져오기
@@ -242,6 +252,143 @@ function MatchingManagement() {
     }, 100);
   };
 
+  // 엑셀 템플릿 다운로드 (프론트엔드에서 직접 생성)
+  const downloadTemplate = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      
+      // XLSX 라이브러리 import
+      const XLSX = await import('xlsx');
+      
+      // 일반 사용자는 자신의 분류로 고정
+      const category = (user?.role === 'user' && user?.company) ? user.company : '분류명';
+      
+      // 템플릿 데이터 생성
+      const templateData = [
+        ['분류', '회원명', '예금주명', '은행명', '계좌번호'],
+        [category, '홍길동', '홍길동', '국민은행', '123456-78-901234']
+      ];
+      
+      // 워크북 생성
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.aoa_to_sheet(templateData);
+      
+      // 컬럼 너비 설정
+      worksheet['!cols'] = [
+        { wch: 15 }, // 분류
+        { wch: 20 }, // 회원명
+        { wch: 20 }, // 예금주명
+        { wch: 15 }, // 은행명
+        { wch: 25 }  // 계좌번호
+      ];
+      
+      XLSX.utils.book_append_sheet(workbook, worksheet, '매칭회원등록');
+      
+      // Excel 파일 생성
+      const excelBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+      
+      // Blob 생성 및 다운로드
+      const blob = new Blob([excelBuffer], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
+      
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', '매칭회원등록템플릿.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      alert('템플릿이 성공적으로 다운로드되었습니다.');
+    } catch (err) {
+      logger.apiError('템플릿 다운로드', err);
+      alert(`템플릿 다운로드에 실패했습니다: ${err.message}`);
+    }
+  };
+
+  // 엑셀 파일 업로드
+  const handleExcelUpload = async () => {
+    if (!excelUploadModal.file) {
+      alert('엑셀 파일을 선택해주세요.');
+      return;
+    }
+
+    try {
+      setExcelUploadModal(prev => ({ ...prev, uploading: true }));
+      
+      const formData = new FormData();
+      formData.append('excelFile', excelUploadModal.file);
+      formData.append('userRole', currentUser?.role);
+      if (currentUser?.role === 'user') {
+        formData.append('userCompany', currentUser.company);
+      }
+
+      const response = await axios.post('/api/matching/bulk-upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      setUploadResults(response.data);
+      alert(response.data.message);
+      
+      if (response.data.results.success > 0) {
+        fetchMatchings(); // 성공한 경우 목록 새로고침
+      }
+      
+      setExcelUploadModal({ open: false, file: null, uploading: false });
+    } catch (err) {
+      logger.apiError('POST', '/api/matching/bulk-upload', err);
+      
+      if (err.response?.data?.details) {
+        // 상세 에러 메시지가 있는 경우
+        const errorMessage = err.response.data.details.slice(0, 10).join('\n');
+        alert(`업로드 실패:\n${errorMessage}${err.response.data.details.length > 10 ? '\n...' : ''}`);
+      } else {
+        alert(err.response?.data?.error || '엑셀 파일 업로드에 실패했습니다.');
+      }
+      
+      setExcelUploadModal(prev => ({ ...prev, uploading: false }));
+    }
+  };
+
+  // 파일 선택 핸들러
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // 파일 확장자 검증
+      const allowedExtensions = ['.xlsx', '.xls'];
+      const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+      
+      if (!allowedExtensions.includes(fileExtension)) {
+        alert('엑셀 파일(.xlsx, .xls)만 업로드 가능합니다.');
+        return;
+      }
+      
+      // 파일 크기 검증 (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('파일 크기는 10MB를 초과할 수 없습니다.');
+        return;
+      }
+      
+      setExcelUploadModal(prev => ({ ...prev, file }));
+    }
+  };
+
+  // 엑셀 업로드 모달 열기
+  const openExcelUploadModal = () => {
+    setExcelUploadModal({ open: true, file: null, uploading: false });
+    setUploadResults(null);
+  };
+
+  // 엑셀 업로드 모달 닫기
+  const closeExcelUploadModal = () => {
+    setExcelUploadModal({ open: false, file: null, uploading: false });
+    setUploadResults(null);
+  };
+
   // 검색어나 카테고리 필터 변경 시 자동 검색
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -278,9 +425,17 @@ function MatchingManagement() {
           </p>
         </div>
         {['super', 'admin', 'user'].includes(currentUser?.role) && (
-          <button className="create-matching-btn" onClick={openCreateModal}>
-            + 새 매칭 회원 등록
-          </button>
+          <div className="action-buttons">
+            <button className="create-matching-btn" onClick={openCreateModal}>
+              + 새 매칭 회원 등록
+            </button>
+            <button className="excel-upload-btn" onClick={openExcelUploadModal}>
+              📊 엑셀 대량 등록
+            </button>
+            <button className="template-download-btn" onClick={downloadTemplate}>
+              📥 템플릿 다운로드
+            </button>
+          </div>
         )}
       </div>
 
@@ -558,6 +713,97 @@ function MatchingManagement() {
                 disabled={editLoading || !editModal.category || !editModal.member_name || !editModal.account_holder || !editModal.bank_name || !editModal.account_number}
               >
                 {editLoading ? '처리 중...' : '수정'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 엑셀 업로드 모달 */}
+      {excelUploadModal.open && (
+        <div className="modal-overlay">
+          <div className="modal excel-upload-modal">
+            <div className="modal-header">
+              <h3>엑셀 대량 등록</h3>
+              <button className="modal-close" onClick={closeExcelUploadModal}>×</button>
+            </div>
+            <div className="modal-content">
+              <div className="upload-instructions">
+                <h4>📋 업로드 가이드</h4>
+                <ul>
+                  <li>엑셀 파일은 .xlsx 또는 .xls 형식이어야 합니다.</li>
+                  <li>파일 크기는 10MB를 초과할 수 없습니다.</li>
+                  <li>첫 번째 행은 반드시 헤더여야 합니다: 분류, 회원명, 예금주명, 은행명, 계좌번호</li>
+                  <li>모든 필드는 필수 입력 항목입니다.</li>
+                </ul>
+              </div>
+              
+              <div className="file-upload-section">
+                <div className="file-input-wrapper">
+                  <input
+                    type="file"
+                    id="excelFile"
+                    accept=".xlsx,.xls"
+                    onChange={handleFileSelect}
+                    className="file-input"
+                  />
+                  <label htmlFor="excelFile" className="file-input-label">
+                    {excelUploadModal.file ? excelUploadModal.file.name : '엑셀 파일 선택'}
+                  </label>
+                </div>
+                
+                {excelUploadModal.file && (
+                  <div className="file-info">
+                    <p>선택된 파일: {excelUploadModal.file.name}</p>
+                    <p>파일 크기: {(excelUploadModal.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                )}
+              </div>
+
+              {uploadResults && (
+                <div className="upload-results">
+                  <h4>📊 업로드 결과</h4>
+                  <div className="results-summary">
+                    <div className="result-item success">
+                      <span className="result-label">성공:</span>
+                      <span className="result-value">{uploadResults.results.success}건</span>
+                    </div>
+                    <div className="result-item failed">
+                      <span className="result-label">실패:</span>
+                      <span className="result-value">{uploadResults.results.failed}건</span>
+                    </div>
+                  </div>
+                  
+                  {uploadResults.results.errors.length > 0 && (
+                    <div className="error-details">
+                      <h5>❌ 실패 상세 내역</h5>
+                      <div className="error-list">
+                        {uploadResults.results.errors.slice(0, 10).map((error, index) => (
+                          <div key={index} className="error-item">{error}</div>
+                        ))}
+                        {uploadResults.results.errors.length > 10 && (
+                          <div className="error-item">... 및 {uploadResults.results.errors.length - 10}건 더</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="cancel-btn" 
+                onClick={closeExcelUploadModal}
+                disabled={excelUploadModal.uploading}
+              >
+                취소
+              </button>
+              <button 
+                className="confirm-btn" 
+                onClick={handleExcelUpload}
+                disabled={excelUploadModal.uploading || !excelUploadModal.file}
+              >
+                {excelUploadModal.uploading ? '업로드 중...' : '업로드'}
               </button>
             </div>
           </div>

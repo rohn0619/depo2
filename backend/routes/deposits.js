@@ -364,14 +364,6 @@ router.get('/poll', async (req, res) => {
         const [rows] = await conn.query(query, params);
         await conn.end();
         
-        // 디버깅을 위한 로그 추가
-        console.log('🔍 폴링 API에서 가져온 원본 데이터:', rows.map(r => ({
-            id: r.id,
-            sender: r.sender,
-            is_matching_member: r.is_matching_member,
-            requires_new_alert: r.requires_new_alert
-        })));
-        
         // 프론트엔드 호환을 위해 데이터 포맷 변환
         const deposits = rows.map(row => {
             const fee = row.fee || 0;
@@ -398,14 +390,6 @@ router.get('/poll', async (req, res) => {
                 created_at: row.created_at
             };
         });
-        
-        // 변환된 데이터 로그 추가
-        console.log('🔍 폴링 API에서 반환하는 변환된 데이터:', deposits.map(d => ({
-            id: d.id,
-            sender: d.sender,
-            is_matching_member: d.is_matching_member,
-            requires_new_alert: d.requires_new_alert
-        })));
         
         // 미확인 개수도 함께 반환
         let uncheckedQuery = 'SELECT COUNT(*) as count FROM deposits WHERE is_checked = FALSE';
