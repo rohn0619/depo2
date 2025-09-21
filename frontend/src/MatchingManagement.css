@@ -1,4 +1,4 @@
-.user-management-container {
+.matching-management-container {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.07);
@@ -13,7 +13,7 @@
   margin-bottom: 24px;
 }
 
-.user-management-container h2 {
+.matching-management-container h2 {
   margin-top: 0;
   margin-bottom: 8px;
   color: #232946;
@@ -28,7 +28,7 @@
   font-size: 0.95rem;
 }
 
-.create-user-btn {
+.create-matching-btn {
   background: #232946;
   color: white;
   border: none;
@@ -41,15 +41,80 @@
   white-space: nowrap;
 }
 
-.create-user-btn:hover {
+.create-matching-btn:hover {
   background: #393e6c;
 }
 
-.user-table-container {
+/* 필터 섹션 */
+.filter-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-input {
+  padding: 10px 14px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 250px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #232946;
+}
+
+.search-btn {
+  background: #232946;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-btn:hover {
+  background: #393e6c;
+}
+
+.category-filter {
+  display: flex;
+  align-items: center;
+}
+
+.category-select {
+  padding: 10px 14px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  min-width: 150px;
+  transition: border-color 0.3s ease;
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: #232946;
+}
+
+.matching-table-container {
   overflow-x: auto;
 }
 
-.user-table {
+.matching-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -58,28 +123,28 @@
   box-shadow: 0 1px 4px rgba(44,62,80,0.04);
 }
 
-.user-table th, .user-table td {
+.matching-table th, .matching-table td {
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #f0f1f5;
 }
 
-.user-table th {
+.matching-table th {
   background: #f4f6fa;
   color: #232946;
   font-weight: 700;
   border-bottom: 2px solid #e0e3eb;
 }
 
-.user-table tbody tr {
+.matching-table tbody tr {
   transition: background 0.2s;
 }
 
-.user-table tbody tr:hover {
+.matching-table tbody tr:hover {
   background: #f0f4ff;
 }
 
-.user-table tbody tr:last-child td {
+.matching-table tbody tr:last-child td {
   border-bottom: none;
 }
 
@@ -89,37 +154,13 @@
   font-style: italic;
 }
 
-.role-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-.role-badge.super {
-  background: #ff6b6b;
-  color: white;
-}
-
-.role-badge.admin {
-  background: #4ecdc4;
-  color: white;
-}
-
-.role-badge.user {
-  background: #45b7d1;
-  color: white;
-}
-
 .action-buttons {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.edit-user-btn {
+.edit-matching-btn {
   background: #232946;
   color: #fff;
   border: none;
@@ -130,16 +171,16 @@
   transition: background 0.2s;
 }
 
-.edit-user-btn:hover:not(:disabled) {
+.edit-matching-btn:hover:not(:disabled) {
   background: #393e6c;
 }
 
-.edit-user-btn:disabled {
+.edit-matching-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
 
-.delete-user-btn {
+.delete-matching-btn {
   background: #dc3545;
   color: #fff;
   border: none;
@@ -150,20 +191,11 @@
   transition: background 0.2s;
 }
 
-.delete-user-btn:hover:not(:disabled) {
+.delete-matching-btn:hover:not(:disabled) {
   background: #c82333;
 }
 
-.delete-user-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.reset-password-btn:hover:not(:disabled) {
-  background: #393e6c;
-}
-
-.reset-password-btn:disabled {
+.delete-matching-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
@@ -368,42 +400,30 @@
   cursor: not-allowed;
 }
 
-/* 수수료 관련 스타일 */
-.fee-display {
-  font-weight: 600;
-  color: #232946;
-}
-
-.fee-zero {
-  color: #888;
-  font-style: italic;
-}
-
-.fee-input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-
-.fee-input:focus {
-  outline: none;
-  border-color: #232946;
-  box-shadow: 0 0 0 2px rgba(35, 41, 70, 0.1);
-}
-
-.fee-input::-webkit-outer-spin-button,
-.fee-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.fee-input[type=number] {
-  -moz-appearance: textfield;
-} 
-.role-badge.settlement {
-  background: #f39c12;
-  color: white;
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-box {
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .category-select {
+    width: 100%;
+  }
+  
+  .matching-table-container {
+    overflow-x: scroll;
+  }
+  
+  .matching-table {
+    min-width: 800px;
+  }
 }

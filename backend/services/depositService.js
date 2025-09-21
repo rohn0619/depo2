@@ -7,7 +7,7 @@ const logger = require('../utils/logger');
 async function createDeposit(depositData) {
     const conn = await mysql.createConnection(dbConfig);
     
-    const { date, bank, amount, balance, sender, company, transaction_type, sms_raw } = depositData;
+    const { date, bank, amount, balance, sender, company, transaction_type, sms_raw, is_matching_member, requires_new_alert } = depositData;
     
     // transaction_type은 필수 필드 (입금: 1, 출금: 0)
     if (transaction_type === null || transaction_type === undefined) {
@@ -15,8 +15,8 @@ async function createDeposit(depositData) {
     }
     
     const [result] = await conn.query(
-        'INSERT INTO deposits (date, bank, amount, balance, sender, company, transaction_type, sms_raw) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [date, bank, amount, balance, sender, company, transaction_type, sms_raw]
+        'INSERT INTO deposits (date, bank, amount, balance, sender, company, transaction_type, sms_raw, is_matching_member, requires_new_alert) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [date, bank, amount, balance, sender, company, transaction_type, sms_raw, is_matching_member || false, requires_new_alert || false]
     );
     
     await conn.end();

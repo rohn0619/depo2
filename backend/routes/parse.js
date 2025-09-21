@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { stringToDictionary } = require('../utils/stringParser');
+const { checkMatchingMember } = require('../utils/matchingChecker');
 const mysql = require('mysql2/promise');
 const dbConfig = require('../config/database');
 
@@ -23,7 +24,7 @@ router.post('/', async (req, res) => {
         );
         await conn.end();
         
-        const result = stringToDictionary(inputString, approvedCompanies);
+        const result = await stringToDictionary(inputString, approvedCompanies, checkMatchingMember);
         res.json(result);
     } catch (error) {
         console.error('파싱 오류:', error);

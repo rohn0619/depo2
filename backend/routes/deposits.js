@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 const dbConfig = require('../config/database');
 const depositService = require('../services/depositService');
 const { stringToDictionary } = require('../utils/stringParser');
+const { checkMatchingMember } = require('../utils/matchingChecker');
 const logger = require('../utils/logger');
 const XLSX = require('xlsx');
 
@@ -71,7 +72,7 @@ router.post('/', async (req, res) => {
             parsed = modifiedData;
             logger.info('수정된 데이터 사용', { modifiedData });
         } else {
-            parsed = stringToDictionary(sms, approvedCompanies);
+            parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember);
             logger.info('파싱된 데이터 사용', { parsed });
         }
         let date = null, bank = null, amount = null, balance = null, sender = null, company = null, transaction_type = 1;
@@ -120,7 +121,9 @@ router.post('/', async (req, res) => {
         }
         
         const depositId = await depositService.createDeposit({
-            date, bank, amount, balance, sender, company, transaction_type, sms_raw: sms
+            date, bank, amount, balance, sender, company, transaction_type, sms_raw: sms,
+            is_matching_member: parsed.is_matching_member || false,
+            requires_new_alert: parsed.requires_new_alert || false
         });
         
         // 폴링을 통해서만 알림 전송하므로 SSE 알림 제거
@@ -143,7 +146,7 @@ router.post('/', async (req, res) => {
         
         res.json({ success: parseSuccess, id: depositId, parseSuccess });
     } catch (e) {
-        logger.business('SMS 파싱 및 저장', { sms: sms.substring(0, 100) }, e);
+        logger.business('SMS 파싱 및 저장', { sms: req.body.sms ? req.body.sms.substring(0, 100) : 'N/A' }, e);
         res.status(500).json({ error: 'DB 오류', message: e.message });
     }
 });
@@ -238,7 +241,7 @@ router.post('/receive-sms', async (req, res) => {
         );
         await conn.end();
         
-        const parsed = stringToDictionary(sms, approvedCompanies);
+        const parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember);
         
         let date = null, bank = null, amount = null, balance = null, sender = null, company = null, transaction_type = 1;
         let parseSuccess = false;
@@ -274,7 +277,7 @@ router.post('/receive-sms', async (req, res) => {
             }
         } else {
             logger.business('외부 API SMS 파싱 실패', { 
-                sms: sms.substring(0, 100), 
+                sms: req.body.sms ? req.body.sms.substring(0, 100) : 'N/A', 
                 parsed,
                 missingFields: {
                     bank: !parsed.bank,
@@ -287,7 +290,9 @@ router.post('/receive-sms', async (req, res) => {
         }
         
         const depositId = await depositService.createDeposit({
-            date, bank, amount, balance, sender, company, transaction_type, sms_raw: sms
+            date, bank, amount, balance, sender, company, transaction_type, sms_raw: sms,
+            is_matching_member: parsed.is_matching_member || false,
+            requires_new_alert: parsed.requires_new_alert || false
         });
         
         // 폴링을 통해서만 알림 전송하므로 SSE 알림 제거
@@ -330,6 +335,8 @@ router.get('/poll', async (req, res) => {
                    DATE_FORMAT(d.date, '%Y-%m-%d %H:%i:%s') as date,
                    d.bank, d.amount, d.balance, d.transaction_type,
                    d.sender, d.company, d.sms_raw, d.is_checked,
+                   COALESCE(d.is_matching_member, 0) as is_matching_member, 
+                   COALESCE(d.requires_new_alert, 0) as requires_new_alert,
                    d.created_at, u.fee, u.company_name
             FROM deposits d 
             LEFT JOIN users u ON d.company = u.company
@@ -357,6 +364,14 @@ router.get('/poll', async (req, res) => {
         const [rows] = await conn.query(query, params);
         await conn.end();
         
+        // 디버깅을 위한 로그 추가
+        console.log('🔍 폴링 API에서 가져온 원본 데이터:', rows.map(r => ({
+            id: r.id,
+            sender: r.sender,
+            is_matching_member: r.is_matching_member,
+            requires_new_alert: r.requires_new_alert
+        })));
+        
         // 프론트엔드 호환을 위해 데이터 포맷 변환
         const deposits = rows.map(row => {
             const fee = row.fee || 0;
@@ -378,9 +393,19 @@ router.get('/poll', async (req, res) => {
                 company_name: row.company_name,
                 sms_raw: row.sms_raw,
                 is_checked: row.is_checked,
+                is_matching_member: row.is_matching_member,
+                requires_new_alert: row.requires_new_alert,
                 created_at: row.created_at
             };
         });
+        
+        // 변환된 데이터 로그 추가
+        console.log('🔍 폴링 API에서 반환하는 변환된 데이터:', deposits.map(d => ({
+            id: d.id,
+            sender: d.sender,
+            is_matching_member: d.is_matching_member,
+            requires_new_alert: d.requires_new_alert
+        })));
         
         // 미확인 개수도 함께 반환
         let uncheckedQuery = 'SELECT COUNT(*) as count FROM deposits WHERE is_checked = FALSE';

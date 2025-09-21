@@ -6,6 +6,7 @@ import MessageTest from './MessageTest';
 import DepositTable from './DepositTable';
 import UserManagement from './UserManagement';
 import CompanyManagement from './CompanyManagement';
+import MatchingManagement from './MatchingManagement';
 import Settlement from './Settlement';
 // import Manual from './Manual';
 import Maintenance from './Maintenance';
@@ -71,6 +72,19 @@ function AppContent() {
               utterance.volume = 1.0;
               speechSynthesis.speak(utterance);
           }
+      }
+  };
+
+  // 매칭 회원이 아닌 입금 알림음 (새로운 효과음)
+  const playNewMemberAlertSound = () => {
+      // 일단 TTS만 사용 (오디오 파일이 없으므로)
+      if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance('비회원 입금! 비회원 입금!');
+          utterance.lang = 'ko-KR';
+          utterance.rate = 0.9;
+          utterance.pitch = 1.1;
+          utterance.volume = 0.9;
+          speechSynthesis.speak(utterance);
       }
   };
 
@@ -193,6 +207,23 @@ function AppContent() {
       }
     });
 
+    // 새로운 매칭 회원 입금 알림 핸들러
+    pollingClient.setNewMemberDepositCallback((data) => {
+      logger.info('새로운 매칭 회원 입금 발견', data);
+      
+      // 새로운 회원 알림음 재생
+      playNewMemberAlertSound();
+      
+      // 입금내역 페이지에 있는 경우 데이터 업데이트 트리거 설정
+      if (currentPath.current === '/deposits') {
+        console.log('🆕 입금내역 페이지에서 새로운 회원 입금 알림 - 데이터 업데이트 트리거');
+        setDataUpdateTrigger(prev => prev + 1);
+      } else {
+        // 다른 페이지에 있는 경우 뱃지 카운트 증가
+        setUnreadCount(prev => prev + 1);
+      }
+    });
+
     // 미확인 개수 업데이트 핸들러
     pollingClient.setUncheckedCountUpdateCallback((data) => {
       logger.info('미확인 개수 업데이트', data);
@@ -218,6 +249,7 @@ function AppContent() {
       pollingClient.setNewDepositCallback(null);
       pollingClient.setOneWonDepositCallback(null);
       pollingClient.setNewWithdrawalCallback(null);
+      pollingClient.setNewMemberDepositCallback(null);
       pollingClient.setUncheckedCountUpdateCallback(null);
     };
   }, [isLoggedIn]);
@@ -399,6 +431,11 @@ function AppContent() {
                     <NavLink to="/companies" className={({ isActive }) => isActive ? 'active' : ''}>분류 관리</NavLink>
                   </li>
                 )}
+                {['super', 'admin', 'user'].includes(user?.role) && (
+                  <li>
+                    <NavLink to="/matching" className={({ isActive }) => isActive ? 'active' : ''}>매칭 관리</NavLink>
+                  </li>
+                )}
               </>
             )}
           </ul>
@@ -423,6 +460,7 @@ function AppContent() {
           {/* <Route path="/manual" element={<Manual />} /> */}
           <Route path="/users" element={<UserManagement />} />
           <Route path="/companies" element={<CompanyManagement />} />
+          <Route path="/matching" element={<MatchingManagement />} />
           <Route path="*" element={<Navigate to={user?.role === 'settlement' ? "/deposits" : "/"} replace />} />
         </Routes>
       </main>

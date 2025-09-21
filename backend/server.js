@@ -61,12 +61,14 @@ const parseRoutes = require('./routes/parse');
 const depositRoutes = require('./routes/deposits');
 const settlementRoutes = require('./routes/settlement');
 const sseRoutes = require('./routes/sse');
+const matchingRoutes = require('./routes/matching');
 const { router: maintenanceRoutes } = require('./routes/maintenance');
 
 app.use('/api/parse', parseRoutes);
 app.use('/api/deposits', depositRoutes);
 app.use('/api/settlement', settlementRoutes);
 app.use('/api/sse', sseRoutes);
+app.use('/api/matching', matchingRoutes);
 app.use('/api/maintenance', maintenanceRoutes);
 
 

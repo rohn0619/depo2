@@ -2,9 +2,10 @@
  * 문자열을 딕셔너리로 변환하는 메인 함수
  * @param {string} inputString 입력 문자열
  * @param {Array} approvedCompanies 승인된 company 목록 (선택사항)
+ * @param {Function} checkMatchingMember 매칭 회원 체크 함수 (선택사항)
  * @returns {object} 파싱된 결과
  */
-function stringToDictionary(inputString, approvedCompanies = []) {
+async function stringToDictionary(inputString, approvedCompanies = [], checkMatchingMember = null) {
     if (!inputString || typeof inputString !== 'string') {
         return {};
     }
@@ -279,6 +280,43 @@ function stringToDictionary(inputString, approvedCompanies = []) {
     // company 값이 있으면 거래자명에서 제거
     if (result.company && result.sender_name && result.sender_name.includes(result.company)) {
         result.sender_name = result.sender_name.replace(new RegExp(`\\s*${result.company}\\s*`, 'g'), '').trim();
+    }
+
+    // 매칭 회원 체크 (입금인 경우만)
+    if (result.transaction_type === 'deposit' && result.company && result.sender_name && checkMatchingMember) {
+        try {
+            console.log('🔍 매칭 회원 체크 시작:', {
+                company: result.company,
+                sender_name: result.sender_name
+            });
+            
+            // sender_name을 account_holder로 사용하여 매칭 회원 체크
+            const isMatchingMember = await checkMatchingMember(result.company, result.sender_name);
+            result.is_matching_member = isMatchingMember;
+            
+            console.log('✅ 매칭 회원 체크 결과:', {
+                is_matching_member: isMatchingMember,
+                requires_new_alert: !isMatchingMember
+            });
+            
+            // 매칭 회원이 아닌 경우 새로운 알림음 플래그 설정
+            if (!isMatchingMember) {
+                result.requires_new_alert = true;
+            }
+        } catch (error) {
+            console.error('매칭 회원 체크 오류:', error);
+            result.is_matching_member = false;
+            result.requires_new_alert = false;
+        }
+    } else {
+        console.log('⚠️ 매칭 회원 체크 건너뜀:', {
+            transaction_type: result.transaction_type,
+            company: result.company,
+            sender_name: result.sender_name,
+            checkMatchingMember: !!checkMatchingMember
+        });
+        result.is_matching_member = false;
+        result.requires_new_alert = false;
     }
 
     // 잔액 추출

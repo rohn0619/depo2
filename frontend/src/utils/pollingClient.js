@@ -7,11 +7,13 @@ class PollingClient {
         this.isPolling = false;
         this.lastCheckedId = null;
         this.pollingDelay = 5000; // 3초마다 체크
+        this.processedDeposits = new Set(); // 처리된 입금 ID 추적
         
         // 콜백 함수들
         this.onNewDeposit = null;
         this.onOneWonDeposit = null;
         this.onNewWithdrawal = null;
+        this.onNewMemberDeposit = null;
         this.onUncheckedCountUpdate = null;
     }
 
@@ -214,6 +216,15 @@ class PollingClient {
 
     // 입금내역 처리
     processDeposit(deposit) {
+        // 이미 처리된 입금인지 확인
+        if (this.processedDeposits.has(deposit.id)) {
+            console.log('⚠️ 이미 처리된 입금 건너뜀:', deposit.id);
+            return;
+        }
+        
+        // 처리된 입금 ID 추가
+        this.processedDeposits.add(deposit.id);
+        
         logger.info('입금내역 처리 시작', { 
             id: deposit.id, 
             amount: deposit.amount, 
@@ -241,13 +252,48 @@ class PollingClient {
                 id: deposit.id, 
                 amount: deposit.amount, 
                 sender: deposit.sender,
+                is_matching_member: deposit.is_matching_member,
+                requires_new_alert: deposit.requires_new_alert,
                 timestamp: new Date().toISOString() 
             });
-            if (this.onNewDeposit) {
-                this.onNewDeposit({
-                    type: 'new_deposit',
-                    deposit: deposit
+            
+            // 매칭 회원 여부에 따라 다른 알림
+            console.log('🔍 폴링 클라이언트에서 받은 데이터:', {
+                id: deposit.id,
+                is_matching_member: deposit.is_matching_member,
+                requires_new_alert: deposit.requires_new_alert,
+                sender: deposit.sender
+            });
+            
+            if (deposit.is_matching_member === 1 || deposit.is_matching_member === true) {
+                // 매칭 회원: 기존 "새로운 내역이 있습니다" 알림
+                logger.info('💰 매칭 회원 입금 발견!', { 
+                    id: deposit.id, 
+                    amount: deposit.amount, 
+                    sender: deposit.sender,
+                    timestamp: new Date().toISOString() 
                 });
+                if (this.onNewDeposit) {
+                    this.onNewDeposit({
+                        type: 'new_deposit',
+                        deposit: deposit
+                    });
+                }
+            } else {
+                // 비매칭 회원: 다른 알림
+                logger.info('🆕 새로운 회원 입금 발견!', { 
+                    id: deposit.id, 
+                    amount: deposit.amount, 
+                    sender: deposit.sender,
+                    is_matching_member: deposit.is_matching_member,
+                    timestamp: new Date().toISOString() 
+                });
+                if (this.onNewMemberDeposit) {
+                    this.onNewMemberDeposit({
+                        type: 'new_member_deposit',
+                        deposit: deposit
+                    });
+                }
             }
         }
         // 출금
@@ -278,6 +324,10 @@ class PollingClient {
 
     setNewWithdrawalCallback(callback) {
         this.onNewWithdrawal = callback;
+    }
+
+    setNewMemberDepositCallback(callback) {
+        this.onNewMemberDeposit = callback;
     }
 
     setUncheckedCountUpdateCallback(callback) {
