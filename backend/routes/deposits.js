@@ -32,6 +32,9 @@ router.get('/', async (req, res) => {
             // 정산 사용자는 자신의 분류만 조회
             filters.company = company;
             filters.selectedCompany = company;
+            
+            // 디버깅 로그
+            console.log('💰 [deposits] 정산 사용자 fee:', fee, 'parsed:', parseFloat(fee));
         }
         
         const result = await depositService.getDeposits(filters);

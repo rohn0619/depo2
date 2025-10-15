@@ -131,7 +131,8 @@ app.post('/api/login', async (req, res) => {
                 id: user.id, 
                 username: user.username, 
                 role: user.role,
-                company: user.company
+                company: user.company,
+                fee: parseFloat(user.fee) || 0
             },
             process.env.JWT_SECRET || 'your-secret-key',
             { expiresIn: '24h' }

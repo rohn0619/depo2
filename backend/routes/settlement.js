@@ -4,14 +4,25 @@ const settlementService = require('../services/settlementService');
 const logger = require('../utils/logger');
 const mysql = require('mysql2/promise');
 const dbConfig = require('../config/database');
+const { authenticateToken } = require('../middleware/auth');
+
+// 모든 라우트에 인증 미들웨어 적용
+router.use(authenticateToken);
 
 // 정산 대시보드 기본 통계 API - 인증 필요
 router.get('/basic-stats', async (req, res) => {
     const { period = 'today', company } = req.query;
     
+    // 디버깅 로그
+    console.log('🔍 [settlement/basic-stats] 사용자 정보:', {
+        role: req.user?.role,
+        company: req.user?.company,
+        fee: req.user?.fee,
+        queryCompany: company
+    });
     
     try {
-        const stats = await settlementService.getBasicStats({}, period, company);
+        const stats = await settlementService.getBasicStats(req.user || {}, period, company);
         res.json(stats);
     } catch (e) {
         logger.business('정산 기본 통계 조회', { period, company }, e);
@@ -23,7 +34,7 @@ router.get('/basic-stats', async (req, res) => {
 router.get('/withdrawal-stats', async (req, res) => {
     try {
         const { period = 'today', company } = req.query;
-        const stats = await settlementService.getWithdrawalStats({}, period, company);
+        const stats = await settlementService.getWithdrawalStats(req.user || {}, period, company);
         res.json(stats);
     } catch (e) {
         logger.business('정산 출금 통계 조회', { period, company }, e);
@@ -36,7 +47,7 @@ router.get('/period-analysis', async (req, res) => {
     try {
         const { period = 'daily', days = 7, company } = req.query;
         
-        const data = await settlementService.getPeriodAnalysis({}, period, days, company);
+        const data = await settlementService.getPeriodAnalysis(req.user || {}, period, days, company);
         
         res.json(data);
     } catch (e) {
@@ -49,7 +60,7 @@ router.get('/period-analysis', async (req, res) => {
 router.get('/sender-analysis', async (req, res) => {
     try {
         const { company, month } = req.query;
-        const data = await settlementService.getSenderAnalysis({}, company, month);
+        const data = await settlementService.getSenderAnalysis(req.user || {}, company, month);
         res.json(data);
     } catch (e) {
         logger.business('정산 입금자 분석 조회', { company: req.query.company || null, month: req.query.month || null }, e);
@@ -61,7 +72,7 @@ router.get('/sender-analysis', async (req, res) => {
 router.get('/company-analysis', async (req, res) => {
     try {
         const { month } = req.query;
-        const data = await settlementService.getCompanyAnalysis({}, month);
+        const data = await settlementService.getCompanyAnalysis(req.user || {}, month);
         res.json(data);
     } catch (e) {
         logger.business('정산 분류별 분석 조회', { month: req.query.month || null }, e);
@@ -72,7 +83,7 @@ router.get('/company-analysis', async (req, res) => {
 // 정산 대시보드 모든 분류 목록 API - 관리자 전용
 router.get('/all-companies', async (req, res) => {
     try {
-        const data = await settlementService.getAllCompanies({});
+        const data = await settlementService.getAllCompanies(req.user || {});
         res.json(data);
     } catch (e) {
         logger.business('정산 모든 분류 목록 조회', {}, e);

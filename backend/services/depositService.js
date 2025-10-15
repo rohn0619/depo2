@@ -147,8 +147,10 @@ async function getDeposits(filters = {}) {
         if (filters.role === 'settlement' && filters.company) {
             userInfoQuery += ' AND company = ?';
             const [userRows] = await conn2.query(userInfoQuery, [filters.company]);
-            const [settlementRows] = await conn2.query(settlementUserQuery + ' AND company = ?', [filters.company]);
             await conn2.end();
+            
+            // 정산 사용자의 수수료율 (userSettlementFee 파라미터로 전달됨)
+            const userSettlementFeeRate = parseFloat(filters.userSettlementFee) || 0;
             
             // 프론트 호환을 위해 데이터 포맷 변환 및 수수료 계산
             deposits = rows.map(row => {
@@ -163,13 +165,10 @@ async function getDeposits(filters = {}) {
                 const feeAmount = row.transaction_type === 1 ? Math.round((row.amount * fee) / 100) : 0;
                 const netAmount = row.transaction_type === 1 ? row.amount - feeAmount : row.amount;
                 
-                // 정산 수수료 계산 (하나의 분류에 여러 정산 사용자가 있을 경우 합산)
+                // 정산 수수료 계산 (입금액 × 정산사용자fee ÷ 100)
                 let settlementFee = 0;
-                if (row.transaction_type === 1 && feeAmount > 0) {
-                    const settlementUsersForCompany = settlementRows.filter(u => u.company === row.company);
-                    settlementFee = settlementUsersForCompany.reduce((total, settlementUser) => {
-                        return total + Math.round((feeAmount * settlementUser.fee) / 100);
-                    }, 0);
+                if (row.transaction_type === 1 && userSettlementFeeRate > 0) {
+                    settlementFee = Math.round((row.amount * userSettlementFeeRate) / 100);
                 }
                 
                 return {
@@ -211,12 +210,12 @@ async function getDeposits(filters = {}) {
                 const feeAmount = row.transaction_type === 1 ? Math.round((row.amount * fee) / 100) : 0;
                 const netAmount = row.transaction_type === 1 ? row.amount - feeAmount : row.amount;
                 
-                // 정산 수수료 계산 (하나의 분류에 여러 정산 사용자가 있을 경우 합산)
+                // 정산 수수료 계산 (입금액 × 정산사용자fee ÷ 100, 여러 정산 사용자가 있을 경우 합산)
                 let settlementFee = 0;
-                if (row.transaction_type === 1 && feeAmount > 0) {
+                if (row.transaction_type === 1) {
                     const settlementUsersForCompany = settlementRows.filter(u => u.company === row.company);
                     settlementFee = settlementUsersForCompany.reduce((total, settlementUser) => {
-                        return total + Math.round((feeAmount * settlementUser.fee) / 100);
+                        return total + Math.round((row.amount * settlementUser.fee) / 100);
                     }, 0);
                 }
                 

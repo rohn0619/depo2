@@ -35,16 +35,16 @@ async function getBasicStats(user, period, company = null, settlementFee = null)
     const conn = await mysql.createConnection(dbConfig);
     
     let whereClause = '1=1';
-    let params = [];
+    let whereParams = [];
     
     // 일반 사용자는 자신의 분류만 조회
     if (user.role === 'user') {
         whereClause += ' AND d.company = ?';
-        params.push(user.company);
+        whereParams.push(user.company);
     } else if (company) {
         // 관리자나 정산 사용자는 특정 분류 필터링 가능
         whereClause += ' AND d.company = ?';
-        params.push(company);
+        whereParams.push(company);
     }
     
     // 기간별 필터링 (서버 시간 기준)
@@ -52,23 +52,45 @@ async function getBasicStats(user, period, company = null, settlementFee = null)
     switch (period) {
         case 'yesterday':
             dateFilter = `AND LEFT(date, 10) = ?`;
-            params.push(getServerDateSubtract(1));
+            whereParams.push(getServerDateSubtract(1));
             break;
         case 'today':
             dateFilter = `AND LEFT(date, 10) = ?`;
-            params.push(getServerDate());
+            whereParams.push(getServerDate());
             break;
         case 'week':
             dateFilter = `AND date >= ?`;
-            params.push(getServerDateSubtract(7) + ' 00:00:00');
+            whereParams.push(getServerDateSubtract(7) + ' 00:00:00');
             break;
         case 'month':
             dateFilter = `AND date >= ?`;
-            params.push(getServerDateSubtract(30) + ' 00:00:00');
+            whereParams.push(getServerDateSubtract(30) + ' 00:00:00');
             break;
         default:
             dateFilter = `AND LEFT(date, 10) = ?`;
-            params.push(getServerDate());
+            whereParams.push(getServerDate());
+    }
+    
+    // 정산 수수료 계산 로직
+    let settlementFeeCalc;
+    let selectParams = [];
+    if (user.role === 'settlement') {
+        // 정산 사용자인 경우: 입금액 × 정산사용자fee ÷ 100
+        const userFee = parseFloat(user.fee) || 0;
+        console.log('💰 [settlementService] 정산 사용자 fee:', user.fee, '→ parsed:', userFee);
+        settlementFeeCalc = `
+            ROUND(SUM(d.amount * ? / 100))`;
+        selectParams.push(userFee);
+    } else {
+        // 관리자인 경우: 입금액 × (해당 company의 모든 정산 사용자 fee 합산) ÷ 100
+        settlementFeeCalc = `
+            ROUND(SUM(
+                d.amount * (
+                    SELECT COALESCE(SUM(s.fee), 0) / 100
+                    FROM users s 
+                    WHERE s.company = d.company AND s.role = 'settlement'
+                )
+            ))`;
     }
     
     const query = `
@@ -80,29 +102,29 @@ async function getBasicStats(user, period, company = null, settlementFee = null)
                 THEN d.amount * u.fee / 100 
                 ELSE 0 
             END)) as total_fee,
-            ROUND(SUM(
-                CASE 
-                    WHEN u.fee IS NOT NULL AND u.fee > 0 THEN
-                        (d.amount * u.fee / 100) * (
-                            SELECT COALESCE(SUM(s.fee), 0) / 100
-                            FROM users s 
-                            WHERE s.company = d.company AND s.role = 'settlement'
-                        )
-                    ELSE 0 
-                END
-            )) as settlement_fee
+            ${settlementFeeCalc} as settlement_fee
         FROM deposits d
         LEFT JOIN users u ON d.company = u.company AND u.role != 'settlement'
         WHERE ${whereClause} ${dateFilter} AND d.transaction_type = 1
     `;
     
-    // 정산 수수료는 서브쿼리로 계산하므로 외부 파라미터 불필요
-    const finalParams = [...params];
+    const finalParams = [...selectParams, ...whereParams];
+    
+    console.log('🔍 [SQL] 전체 쿼리:', query);
+    console.log('🔍 [SQL] 파라미터:', finalParams);
     
     try {
         
         const [rows] = await conn.query(query, finalParams);
         await conn.end();
+        
+        console.log('📊 [settlementService] 쿼리 결과:', {
+            count: rows[0].count,
+            total_amount: rows[0].total_amount,
+            total_fee: rows[0].total_fee,
+            settlement_fee: rows[0].settlement_fee,
+            params: finalParams
+        });
         
         return {
             count: rows[0].count || 0,
@@ -337,18 +359,48 @@ async function getCompanyAnalysis(user, month = null) {
     const conn = await mysql.createConnection(dbConfig);
     
     let whereClause = '1=1';
-    let params = [];
+    let whereParams = [];
     
     // 월별 필터링 (올해년도 기준)
     if (month && month.toString().trim() !== '') {
         const currentYear = new Date().getFullYear();
         whereClause += ' AND DATE_FORMAT(date, "%Y-%m") = ?';
-        params.push(`${currentYear}-${month.toString().padStart(2, '0')}`);
+        whereParams.push(`${currentYear}-${month.toString().padStart(2, '0')}`);
     } else {
         // 월이 지정되지 않으면 올해년도 전체
         const currentYear = new Date().getFullYear();
         whereClause += ' AND date >= ? AND date < ?';
-        params.push(`${currentYear}-01-01`, `${currentYear + 1}-01-01`);
+        whereParams.push(`${currentYear}-01-01`, `${currentYear + 1}-01-01`);
+    }
+    
+    // 정산 수수료 계산 로직
+    let settlementFeeCalc;
+    let selectParams = [];
+    if (user.role === 'settlement') {
+        // 정산 사용자인 경우: 입금액 × 정산사용자fee ÷ 100 (transaction_type = 1인 경우만)
+        const userFee = parseFloat(user.fee) || 0;
+        settlementFeeCalc = `
+            ROUND(SUM(
+                CASE 
+                    WHEN d.transaction_type = 1 THEN d.amount * ? / 100
+                    ELSE 0 
+                END
+            ))`;
+        selectParams.push(userFee);
+    } else {
+        // 관리자인 경우: 입금액 × (해당 company의 모든 정산 사용자 fee 합산) ÷ 100
+        settlementFeeCalc = `
+            ROUND(SUM(
+                CASE 
+                    WHEN d.transaction_type = 1 THEN
+                        d.amount * (
+                            SELECT COALESCE(SUM(s.fee), 0) / 100
+                            FROM users s 
+                            WHERE s.company = d.company AND s.role = 'settlement'
+                        )
+                    ELSE 0 
+                END
+            ))`;
     }
     
     const query = `
@@ -362,17 +414,7 @@ async function getCompanyAnalysis(user, month = null) {
                 THEN d.amount * u.fee / 100 
                 ELSE 0 
             END)) as total_fee,
-            ROUND(SUM(
-                CASE 
-                    WHEN d.transaction_type = 1 AND u.fee IS NOT NULL AND u.fee > 0 THEN
-                        (d.amount * u.fee / 100) * (
-                            SELECT COALESCE(SUM(s.fee), 0) / 100
-                            FROM users s 
-                            WHERE s.company = d.company AND s.role = 'settlement'
-                        )
-                    ELSE 0 
-                END
-            )) as total_settlement_fee,
+            ${settlementFeeCalc} as total_settlement_fee,
             COUNT(CASE WHEN d.transaction_type = 0 THEN 1 END) as withdrawal_count,
             SUM(CASE WHEN d.transaction_type = 0 THEN d.amount ELSE 0 END) as total_withdrawal
         FROM deposits d
@@ -381,6 +423,8 @@ async function getCompanyAnalysis(user, month = null) {
         GROUP BY d.company, u.company_name
         ORDER BY total_deposit DESC
     `;
+    
+    const params = [...selectParams, ...whereParams];
     
     try {
         const [rows] = await conn.query(query, params);

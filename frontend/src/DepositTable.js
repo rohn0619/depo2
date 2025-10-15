@@ -437,7 +437,9 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
             value={dateTo}
             onChange={e => setDateTo(e.target.value)}
           />
-          {['admin', 'super'].includes(user?.role) && (
+        </div>
+        {['admin', 'super'].includes(user?.role) && (
+          <div className="searchbar-right">
             <select
               value={selectedCompany}
               onChange={e => setSelectedCompany(e.target.value)}
@@ -447,14 +449,16 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                 <option key={index} value={company}>{company}</option>
               ))}
             </select>
-          )}
-        </div>
-        <div className="searchbar-right">
-          {user?.role === 'settlement' && (
+          </div>
+        )}
+        {user?.role === 'settlement' && (
+          <div className="searchbar-right">
             <span className="settlement-company-info">
               담당 분류: <strong>{user.company}</strong>
             </span>
-          )}
+          </div>
+        )}
+        <div className="searchbar-right">
           <button 
             className="excel-download-btn"
             onClick={handleExcelDownload}
