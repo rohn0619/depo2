@@ -519,18 +519,11 @@ function DepositTable({ setUnreadCount, dataUpdateTrigger }) {
                     {(user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') && (
                       <td>
                         {(() => {
-                          if (row.transaction_type === 1 && row.fee_amount > 0) {
-                            // 정산 사용자의 경우 자신의 fee 사용
-                            if (user?.role === 'settlement' && user?.fee) {
-                              const settlementFee = Math.round((row.fee_amount * user.fee) / 100);
-                              return formatAmount(settlementFee);
-                            }
-                            // 관리자/슈퍼관리자의 경우 해당 분류의 정산 사용자 fee 사용
-                            else if ((user?.role === 'admin' || user?.role === 'super') && row.settlement_fee !== undefined) {
-                              return formatAmount(row.settlement_fee || 0);
-                            }
+                          // 서버에서 계산된 settlement_fee 사용
+                          if (row.transaction_type === 1 && row.settlement_fee !== undefined) {
+                            return formatAmount(row.settlement_fee || 0);
                           }
-                          return (user?.role === 'settlement' || user?.role === 'admin' || user?.role === 'super') ? '0' : '-';
+                          return '0원';
                         })()}
                       </td>
                     )}
