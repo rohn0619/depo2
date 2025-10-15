@@ -72,7 +72,9 @@ router.post('/', async (req, res) => {
             parsed = modifiedData;
             logger.info('수정된 데이터 사용', { modifiedData });
         } else {
-            parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember);
+            // 현재 시간 생성 (문자가 들어온 시간)
+            const receivedAt = new Date();
+            parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember, receivedAt);
             logger.info('파싱된 데이터 사용', { parsed });
         }
         let date = null, bank = null, amount = null, balance = null, sender = null, company = null, transaction_type = 1;
@@ -241,7 +243,9 @@ router.post('/receive-sms', async (req, res) => {
         );
         await conn.end();
         
-        const parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember);
+        // 현재 시간 생성 (문자가 들어온 시간)
+        const receivedAt = new Date();
+        const parsed = await stringToDictionary(sms, approvedCompanies, checkMatchingMember, receivedAt);
         
         let date = null, bank = null, amount = null, balance = null, sender = null, company = null, transaction_type = 1;
         let parseSuccess = false;

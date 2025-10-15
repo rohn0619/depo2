@@ -24,7 +24,10 @@ router.post('/', async (req, res) => {
         );
         await conn.end();
         
-        const result = await stringToDictionary(inputString, approvedCompanies, checkMatchingMember);
+        // 현재 시간 생성 (문자가 들어온 시간)
+        const receivedAt = new Date();
+        
+        const result = await stringToDictionary(inputString, approvedCompanies, checkMatchingMember, receivedAt);
         res.json(result);
     } catch (error) {
         console.error('파싱 오류:', error);

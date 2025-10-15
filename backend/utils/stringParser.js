@@ -3,9 +3,10 @@
  * @param {string} inputString 입력 문자열
  * @param {Array} approvedCompanies 승인된 company 목록 (선택사항)
  * @param {Function} checkMatchingMember 매칭 회원 체크 함수 (선택사항)
+ * @param {Date} receivedAt 문자가 수신된 시간 (선택사항)
  * @returns {object} 파싱된 결과
  */
-async function stringToDictionary(inputString, approvedCompanies = [], checkMatchingMember = null) {
+async function stringToDictionary(inputString, approvedCompanies = [], checkMatchingMember = null, receivedAt = null) {
     if (!inputString || typeof inputString !== 'string') {
         return {};
     }
@@ -108,6 +109,14 @@ async function stringToDictionary(inputString, approvedCompanies = [], checkMatc
             const now = new Date();
             const today = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`;
             result.datetime = `${today} ${timeMatch[1]}`;
+        } else if (receivedAt) {
+            // 날짜와 시간 모두 없는 경우 (케이뱅크 등) - 문자 수신 시간 사용
+            const year = receivedAt.getFullYear();
+            const month = String(receivedAt.getMonth() + 1).padStart(2, '0');
+            const day = String(receivedAt.getDate()).padStart(2, '0');
+            const hours = String(receivedAt.getHours()).padStart(2, '0');
+            const minutes = String(receivedAt.getMinutes()).padStart(2, '0');
+            result.datetime = `${year}/${month}/${day} ${hours}:${minutes}`;
         }
     }
 
